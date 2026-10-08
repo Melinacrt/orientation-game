@@ -1,0 +1,26 @@
+[project]
+name = "orientation-game"
+version = "0.1.0"
+description = "Une orientation où on te regarde jouer, pas répondre à un questionnaire."
+requires-python = ">=3.12"
+dependencies = [
+    "flask>=3.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "ruff>=0.6",
+]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.setuptools]
+packages = ["app"]
