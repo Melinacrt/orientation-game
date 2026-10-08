@@ -1,0 +1,77 @@
+{
+  "id": "cyber-001",
+  "metier": "cyber",
+  "titre": "Alerte sur le serveur RH",
+  "contexte": "Lundi 8h. Un employé des RH signale que ses fichiers sont chiffrés et qu'un message demande une rançon.",
+  "debut": "e1",
+  "etapes": {
+    "e1": {
+      "texte": "Que fais-tu en premier ?",
+      "choix": [
+        {
+          "id": "c1",
+          "label": "Isoler la machine du réseau",
+          "traits": { "analyser": 2, "proteger": 1 },
+          "gravite": 0,
+          "consequence": "La machine est coupée. L'infection ne peut plus se propager.",
+          "suite": "e2"
+        },
+        {
+          "id": "c2",
+          "label": "Redémarrer la machine pour voir",
+          "traits": {},
+          "gravite": 2,
+          "consequence": "Le redémarrage a effacé des traces utiles et laissé le temps au programme de se propager.",
+          "suite": "e2"
+        }
+      ]
+    },
+    "e2": {
+      "texte": "La direction demande où on en est. Que fais-tu ?",
+      "choix": [
+        {
+          "id": "c3",
+          "label": "Faire un point clair et factuel",
+          "traits": { "convaincre": 2 },
+          "gravite": 0,
+          "consequence": "La direction comprend la situation et te laisse travailler.",
+          "suite": "e3"
+        },
+        {
+          "id": "c4",
+          "label": "Dire que tout est sous contrôle",
+          "traits": {},
+          "gravite": 1,
+          "consequence": "La direction se détend, mais découvrira plus tard que ce n'était pas vrai.",
+          "suite": "e3"
+        }
+      ]
+    },
+    "e3": {
+      "texte": "Tu dois décider : payer la rançon ou restaurer les sauvegardes ?",
+      "choix": [
+        {
+          "id": "c5",
+          "label": "Restaurer les sauvegardes",
+          "traits": { "analyser": 1, "proteger": 2 },
+          "gravite": 0,
+          "consequence": "Les données reviennent sans rien payer.",
+          "suite": null
+        },
+        {
+          "id": "c6",
+          "label": "Payer la rançon",
+          "traits": {},
+          "gravite": 3,
+          "consequence": "Rien ne garantit que les données reviendront, et tu encourages les attaquants.",
+          "suite": null
+        }
+      ]
+    }
+  },
+  "fins": [
+    { "gravite_max": 1, "titre": "Crise maîtrisée", "texte": "L'incident est contenu." },
+    { "gravite_max": 3, "titre": "Dégâts limités", "texte": "Des erreurs ont coûté cher mais l'entreprise tient." },
+    { "gravite_max": 99, "titre": "Crise mal gérée", "texte": "L'incident s'aggrave." }
+  ]
+}
