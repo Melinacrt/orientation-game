@@ -28,13 +28,13 @@
 {% if consequence %}
 <p class="consequence">{{ consequence }}</p>
 {% endif %}
-<section class="carte">
+<section class="carte" id="question">
   <h2>Étape {{ numero }} sur {{ total }}</h2>
   {% if image_url %}
   <img class="illustration" src="{{ image_url }}" alt="{{ image_alt }}" loading="lazy">
   {% endif %}
   <p class="etape">{{ etape.texte }}</p>
-  <form method="post" action="{{ url_for('jouer') }}">
+  <form method="post" action="{{ url_for('jouer') }}#question">
     <input type="hidden" name="affaire" value="{{ affaire_id }}">
     <input type="hidden" name="etape" value="{{ etape_id }}">
     <fieldset>
