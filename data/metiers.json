@@ -19,23 +19,62 @@
     "jouable": true
   },
   "avocat": {
-    "titre": "Avocat",
+    "titre": "Avocat de la défense",
     "quotidien": [
-      "Écouter les clients et analyser leur dossier pour construire une défense solide",
-      "Plaider et convaincre au tribunal ou dans les négociations",
-      "Rédiger des actes et suivre l'évolution des lois et de la jurisprudence"
+      "Recevoir des clients, préparer des entretiens confidentiels et, selon les dossiers, assister une personne pendant une garde à vue ou une audition.",
+      "Étudier les pièces d'un dossier pénal, vérifier les déclarations et les éléments matériels, préparer des demandes d'actes et organiser la stratégie avec le client.",
+      "Échanger avec les autres professionnels de la procédure, préparer les audiences, interroger les témoins lorsque la procédure le permet et plaider devant le tribunal."
     ],
     "qualites": [
-      "Art de convaincre",
-      "Sens de l'écoute et de l'analyse",
-      "Ténacité dans la défense des dossiers"
+      "Rigueur et esprit d'analyse",
+      "Écoute et capacité à instaurer une relation de confiance",
+      "Expression orale et écrite claire",
+      "Résistance au stress et capacité à gérer les imprévus",
+      "Indépendance, discrétion et respect de la déontologie"
     ],
     "formations": [
-      "Licence puis master en droit",
-      "Examen d'entrée dans une école d'avocats",
-      "Certificat d'aptitude à la profession d'avocat"
+      {
+        "etape": "Licence de droit",
+        "duree": "3 ans",
+        "description": "Études universitaires portant notamment sur le droit, les institutions, le raisonnement juridique et les méthodes de travail."
+      },
+      {
+        "etape": "Master 1 en droit",
+        "duree": "1 an",
+        "description": "Approfondissement des connaissances juridiques. Un parcours en droit privé ou en droit pénal peut être pertinent."
+      },
+      {
+        "etape": "Master 2 adapté au droit pénal",
+        "duree": "1 an supplémentaire, généralement",
+        "description": "Spécialisation possible en droit pénal, sciences criminelles ou dans un domaine voisin. Le choix du master dépend du projet et des conditions d'accès."
+      },
+      {
+        "etape": "Examen d'accès à l'école d'avocats (CRFPA)",
+        "duree": "Préparation variable, souvent plusieurs mois",
+        "description": "L'examen d'accès est sélectif. Les conditions d'inscription et le niveau universitaire requis doivent être vérifiés auprès des organismes compétents ; un master 1 en droit constitue le niveau de référence pour l'accès à l'examen."
+      },
+      {
+        "etape": "Formation en école d'avocats",
+        "duree": "Environ 18 mois",
+        "description": "Formation professionnelle mêlant enseignements, projets pédagogiques et stages, avec une préparation à l'exercice concret du métier."
+      },
+      {
+        "etape": "Certificat d'aptitude à la profession d'avocat (CAPA)",
+        "duree": "Évaluation à l'issue de la formation",
+        "description": "Obtention du certificat après validation des épreuves et des exigences de la formation professionnelle."
+      },
+      {
+        "etape": "Serment et inscription au barreau",
+        "duree": "Quelques semaines à plusieurs mois selon les démarches",
+        "description": "Après le CAPA, le futur avocat prête serment et accomplit les formalités d'inscription au barreau pour exercer. Les modalités exactes sont à confirmer auprès du barreau concerné."
+      }
     ],
-    "jouable": false
+    "bon_a_savoir": [
+      "Les horaires peuvent être irréguliers : une garde à vue, une audience ou une échéance urgente peut bouleverser une journée. La préparation des dossiers et la rédaction prennent souvent beaucoup de temps en dehors des audiences.",
+      "Les revenus varient selon l'expérience, le lieu d'exercice, le statut et la clientèle. Les honoraires sont encadrés par des règles professionnelles ; l'aide juridictionnelle peut permettre à des personnes disposant de ressources limitées d'accéder à un avocat, selon les conditions applicables."
+    ],
+    "mentions": "Affaire fictive et simplifiée, ce n'est pas un conseil juridique.",
+    "jouable": true
   },
   "medecin": {
     "titre": "Médecin",

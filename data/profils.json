@@ -1,1 +1,283 @@
-[{"id": "sentinelle", "metiers_proches": [{"jouable": true, "lien": "Tu as isolé les machines et vérifié les sauvegardes : c'est exactement le quotidien d'un expert cyber.", "nom": "expert cyber"}, {"jouable": false, "lien": "La surveillance des alertes et le tri des incidents demandent la même rigueur méthodique.", "nom": "analyste SOC"}, {"jouable": false, "lien": "Protéger durablement un parc de machines repose sur cette même obsession de la vérification.", "nom": "administrateur systèmes et réseaux"}], "texte": "Tu aimes comprendre comment les choses fonctionnent et mettre en place des protections solides. Tu agis avec méthode : observer, vérifier, sécuriser.", "titre": "Sentinelle méthodique", "traits_dominants": ["analyser", "proteger"]}, {"id": "enqueteur", "metiers_proches": [{"jouable": true, "lien": "Remonter jusqu'à la pièce jointe piégée en suivant les journaux, c'est le cœur du métier d'expert cyber.", "nom": "expert cyber"}, {"jouable": false, "lien": "Traquer les signaux faibles dans les journaux demande le même flair d'enquêteur.", "nom": "analyste SOC"}, {"jouable": false, "lien": "Recouper des faits et remonter à la cause, c'est aussi ce que fait un data analyst avec ses données.", "nom": "data analyst"}], "texte": "Tu aimes chercher des indices, recouper les faits et remonter jusqu'à la cause d'un problème. Tu n'abandonnes pas avant d'avoir compris.", "titre": "Enquêteur tenace", "traits_dominants": ["enqueter", "analyser"]}, {"id": "mediateur", "metiers_proches": [{"jouable": true, "lien": "Expliquer la situation à la direction sans paniquer et obtenir son feu vert, c'est un réflexe d'expert cyber.", "nom": "expert cyber"}, {"jouable": false, "lien": "Défendre un dossier avec des faits clairs et convaincre, c'est le quotidien d'un avocat en droit du numérique.", "nom": "avocat en droit du numérique"}, {"jouable": false, "lien": "Faire adhérer une équipe à un plan et coordonner les efforts, c'est le rôle d'un chef de projet.", "nom": "chef de projet"}], "texte": "Tu sais expliquer clairement, rassurer et convaincre même sous pression. Les autres te font confiance pour porter un message difficile.", "titre": "Médiateur convaincant", "traits_dominants": ["convaincre", "aider"]}, {"id": "protecteur", "metiers_proches": [{"jouable": true, "lien": "Former les RH et activer la double vérification pour éviter la récidive, c'est protéger comme un expert cyber.", "nom": "expert cyber"}, {"jouable": false, "lien": "Accompagner les personnes avec attention et prévenir les rechutes, c'est le cœur du métier d'infirmier.", "nom": "infirmier"}, {"jouable": false, "lien": "Diagnostiquer, soigner puis expliquer comment éviter la rechute, c'est la démarche d'un médecin.", "nom": "médecin"}], "texte": "Tu penses d'abord aux personnes : les aider, les protéger et leur donner les moyens de ne plus se faire piéger. Tu répares et tu préviens.", "titre": "Protecteur attentionné", "traits_dominants": ["aider", "proteger"]}, {"id": "stratège", "metiers_proches": [{"jouable": true, "lien": "Analyser les preuves puis convaincre la direction de restaurer plutôt que payer, c'est une décision d'expert cyber.", "nom": "expert cyber"}, {"jouable": false, "lien": "Comprendre un système puis le reconstruire proprement, c'est la démarche d'un développeur.", "nom": "développeur"}, {"jouable": false, "lien": "Démontrer par les faits et faire valider une stratégie, c'est le travail d'un avocat en droit du numérique.", "nom": "avocat en droit du numérique"}], "texte": "Tu combines l'analyse rigoureuse et l'art de convaincre : tu comprends vite, puis tu fais adopter la bonne décision.", "titre": "Stratège lucide", "traits_dominants": ["analyser", "convaincre"]}, {"id": "gardien", "metiers_proches": [{"jouable": true, "lien": "Figer les preuves et surveiller le réseau pour empêcher la récidive, c'est la vigilance d'un expert cyber.", "nom": "expert cyber"}, {"jouable": false, "lien": "Répondre aux incidents et remettre les utilisateurs sur pied, c'est le quotidien d'un technicien support.", "nom": "technicien support"}, {"jouable": false, "lien": "Garantir la continuité du service et sécuriser les accès, c'est la mission d'un administrateur systèmes et réseaux.", "nom": "administrateur systèmes et réseaux"}], "texte": "Tu veilles sans relâche : traquer l'intrusion, garder les preuves intactes et monter la garde pour que l'attaque ne revienne pas.", "titre": "Gardien vigilant", "traits_dominants": ["enqueter", "proteger"]}]
+[
+  {
+    "id": "sentinelle",
+    "metiers_proches": [
+      {
+        "jouable": true,
+        "lien": "Tu as isolé les machines et vérifié les sauvegardes : c'est exactement le quotidien d'un expert cyber.",
+        "nom": "expert cyber"
+      },
+      {
+        "jouable": false,
+        "lien": "La surveillance des alertes et le tri des incidents demandent la même rigueur méthodique.",
+        "nom": "analyste SOC"
+      },
+      {
+        "jouable": false,
+        "lien": "Protéger durablement un parc de machines repose sur cette même obsession de la vérification.",
+        "nom": "administrateur systèmes et réseaux"
+      }
+    ],
+    "texte": "Tu aimes comprendre comment les choses fonctionnent et mettre en place des protections solides. Tu agis avec méthode : observer, vérifier, sécuriser.",
+    "titre": "Sentinelle méthodique",
+    "traits_dominants": [
+      "analyser",
+      "proteger"
+    ]
+  },
+  {
+    "id": "enqueteur",
+    "metiers_proches": [
+      {
+        "jouable": true,
+        "lien": "Remonter jusqu'à la pièce jointe piégée en suivant les journaux, c'est le cœur du métier d'expert cyber.",
+        "nom": "expert cyber"
+      },
+      {
+        "jouable": false,
+        "lien": "Traquer les signaux faibles dans les journaux demande le même flair d'enquêteur.",
+        "nom": "analyste SOC"
+      },
+      {
+        "jouable": false,
+        "lien": "Recouper des faits et remonter à la cause, c'est aussi ce que fait un data analyst avec ses données.",
+        "nom": "data analyst"
+      }
+    ],
+    "texte": "Tu aimes chercher des indices, recouper les faits et remonter jusqu'à la cause d'un problème. Tu n'abandonnes pas avant d'avoir compris.",
+    "titre": "Enquêteur tenace",
+    "traits_dominants": [
+      "enqueter",
+      "analyser"
+    ]
+  },
+  {
+    "id": "mediateur",
+    "metiers_proches": [
+      {
+        "jouable": true,
+        "lien": "Expliquer la situation à la direction sans paniquer et obtenir son feu vert, c'est un réflexe d'expert cyber.",
+        "nom": "expert cyber"
+      },
+      {
+        "jouable": false,
+        "lien": "Défendre un dossier avec des faits clairs et convaincre, c'est le quotidien d'un avocat en droit du numérique.",
+        "nom": "avocat en droit du numérique"
+      },
+      {
+        "jouable": false,
+        "lien": "Faire adhérer une équipe à un plan et coordonner les efforts, c'est le rôle d'un chef de projet.",
+        "nom": "chef de projet"
+      }
+    ],
+    "texte": "Tu sais expliquer clairement, rassurer et convaincre même sous pression. Les autres te font confiance pour porter un message difficile.",
+    "titre": "Médiateur convaincant",
+    "traits_dominants": [
+      "convaincre",
+      "aider"
+    ]
+  },
+  {
+    "id": "protecteur",
+    "metiers_proches": [
+      {
+        "jouable": true,
+        "lien": "Former les RH et activer la double vérification pour éviter la récidive, c'est protéger comme un expert cyber.",
+        "nom": "expert cyber"
+      },
+      {
+        "jouable": false,
+        "lien": "Accompagner les personnes avec attention et prévenir les rechutes, c'est le cœur du métier d'infirmier.",
+        "nom": "infirmier"
+      },
+      {
+        "jouable": false,
+        "lien": "Diagnostiquer, soigner puis expliquer comment éviter la rechute, c'est la démarche d'un médecin.",
+        "nom": "médecin"
+      }
+    ],
+    "texte": "Tu penses d'abord aux personnes : les aider, les protéger et leur donner les moyens de ne plus se faire piéger. Tu répares et tu préviens.",
+    "titre": "Protecteur attentionné",
+    "traits_dominants": [
+      "aider",
+      "proteger"
+    ]
+  },
+  {
+    "id": "stratège",
+    "metiers_proches": [
+      {
+        "jouable": true,
+        "lien": "Analyser les preuves puis convaincre la direction de restaurer plutôt que payer, c'est une décision d'expert cyber.",
+        "nom": "expert cyber"
+      },
+      {
+        "jouable": false,
+        "lien": "Comprendre un système puis le reconstruire proprement, c'est la démarche d'un développeur.",
+        "nom": "développeur"
+      },
+      {
+        "jouable": false,
+        "lien": "Démontrer par les faits et faire valider une stratégie, c'est le travail d'un avocat en droit du numérique.",
+        "nom": "avocat en droit du numérique"
+      }
+    ],
+    "texte": "Tu combines l'analyse rigoureuse et l'art de convaincre : tu comprends vite, puis tu fais adopter la bonne décision.",
+    "titre": "Stratège lucide",
+    "traits_dominants": [
+      "analyser",
+      "convaincre"
+    ]
+  },
+  {
+    "id": "gardien",
+    "metiers_proches": [
+      {
+        "jouable": true,
+        "lien": "Figer les preuves et surveiller le réseau pour empêcher la récidive, c'est la vigilance d'un expert cyber.",
+        "nom": "expert cyber"
+      },
+      {
+        "jouable": false,
+        "lien": "Répondre aux incidents et remettre les utilisateurs sur pied, c'est le quotidien d'un technicien support.",
+        "nom": "technicien support"
+      },
+      {
+        "jouable": false,
+        "lien": "Garantir la continuité du service et sécuriser les accès, c'est la mission d'un administrateur systèmes et réseaux.",
+        "nom": "administrateur systèmes et réseaux"
+      }
+    ],
+    "texte": "Tu veilles sans relâche : traquer l'intrusion, garder les preuves intactes et monter la garde pour que l'attaque ne revienne pas.",
+    "titre": "Gardien vigilant",
+    "traits_dominants": [
+      "enqueter",
+      "proteger"
+    ]
+  },
+  {
+    "id": "avocat-stratege",
+    "metiers_proches": [
+      {
+        "jouable": false,
+        "lien": "Comparer les déclarations et construire une argumentation solide, c'est le quotidien de l'avocat de la défense.",
+        "nom": "avocat de la défense"
+      },
+      {
+        "jouable": false,
+        "lien": "Analyser des documents et vérifier leur cohérence demande la même rigueur.",
+        "nom": "juriste d'entreprise"
+      },
+      {
+        "jouable": false,
+        "lien": "Distinguer les faits établis des hypothèses, c'est aussi le travail du magistrat.",
+        "nom": "magistrat"
+      }
+    ],
+    "texte": "Tu as aimé comparer les déclarations, repérer les contradictions et distinguer les faits des suppositions. Tu prends le temps de comprendre les détails avant de construire une argumentation solide.",
+    "titre": "Stratège du dossier",
+    "traits_dominants": [
+      "analyser"
+    ]
+  },
+  {
+    "id": "avocat-orateur",
+    "metiers_proches": [
+      {
+        "jouable": false,
+        "lien": "Présenter des arguments clairs et plaider devant le tribunal, c'est le cœur du métier d'avocat de la défense.",
+        "nom": "avocat de la défense"
+      },
+      {
+        "jouable": false,
+        "lien": "Expliquer avec clarté et convaincre sans exagérer, c'est le rôle du chargé de communication.",
+        "nom": "chargé de communication"
+      },
+      {
+        "jouable": false,
+        "lien": "Rendre une idée complexe compréhensible, c'est aussi le talent de l'enseignant.",
+        "nom": "enseignant"
+      }
+    ],
+    "texte": "Tu as aimé formuler une stratégie, poser des questions précises et présenter des arguments clairs. Tu sais que convaincre ne consiste pas à parler plus fort, mais à défendre une position avec méthode et crédibilité.",
+    "titre": "Orateur de l'audience",
+    "traits_dominants": [
+      "convaincre"
+    ]
+  },
+  {
+    "id": "avocat-enqueteur",
+    "metiers_proches": [
+      {
+        "jouable": false,
+        "lien": "Reconstituer une chronologie et vérifier chaque version, c'est le travail d'enquête de l'avocat de la défense.",
+        "nom": "avocat de la défense"
+      },
+      {
+        "jouable": false,
+        "lien": "Chercher les informations manquantes et recouper les témoignages, c'est le métier du journaliste d'investigation.",
+        "nom": "journaliste d'investigation"
+      },
+      {
+        "jouable": false,
+        "lien": "Remonter jusqu'à la cause en suivant les indices, c'est la démarche de l'analyste.",
+        "nom": "analyste"
+      }
+    ],
+    "texte": "Tu as aimé reconstituer la chronologie, chercher les informations manquantes et examiner les versions des témoins. Tu es attiré par le travail de recherche qui permet de comprendre ce qui s'est réellement passé.",
+    "titre": "Enquêteur du contradictoire",
+    "traits_dominants": [
+      "enqueter"
+    ]
+  },
+  {
+    "id": "avocat-defenseur",
+    "metiers_proches": [
+      {
+        "jouable": false,
+        "lien": "Écouter un client inquiet et l'aider à décider en connaissance de cause, c'est le rôle de l'avocat de la défense.",
+        "nom": "avocat de la défense"
+      },
+      {
+        "jouable": false,
+        "lien": "Accueillir la parole d'une personne en difficulté demande la même écoute.",
+        "nom": "psychologue"
+      },
+      {
+        "jouable": false,
+        "lien": "Accompagner des personnes fragiles avec attention, c'est la mission du travailleur social.",
+        "nom": "travailleur social"
+      }
+    ],
+    "texte": "Tu as aimé écouter Inès, comprendre ses inquiétudes et l'aider à prendre des décisions éclairées. Tu accordes de l'importance à la relation humaine, surtout lorsqu'une personne traverse une situation difficile.",
+    "titre": "Défenseur à l'écoute",
+    "traits_dominants": [
+      "aider"
+    ]
+  },
+  {
+    "id": "avocat-gardien",
+    "metiers_proches": [
+      {
+        "jouable": false,
+        "lien": "Veiller au respect des droits et préserver la confidentialité, c'est le devoir de l'avocat de la défense.",
+        "nom": "avocat de la défense"
+      },
+      {
+        "jouable": false,
+        "lien": "Garantir les droits de chacun et faire respecter les règles, c'est la mission du magistrat.",
+        "nom": "magistrat"
+      },
+      {
+        "jouable": false,
+        "lien": "Protéger des informations sensibles et éviter les décisions précipitées, c'est son quotidien.",
+        "nom": "délégué à la protection des données"
+      }
+    ],
+    "texte": "Tu as aimé veiller au respect des droits de ta cliente, préserver la confidentialité et éviter les décisions précipitées. Tu es sensible à l'équilibre entre la protection d'une personne et le respect des règles de justice.",
+    "titre": "Gardien des droits",
+    "traits_dominants": [
+      "proteger"
+    ]
+  }
+]

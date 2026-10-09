@@ -448,7 +448,9 @@ hr.separateur {
 
 .theme-avocat {
   background: #f3ede2;
-  color: #2a2118;
+  color: #5c1a1b;
+  font-family: Georgia, "Times New Roman", serif;
+  border-top: 4px solid #b08d3e;
 }
 
 .theme-avocat .bandeau {

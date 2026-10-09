@@ -19,8 +19,11 @@ Contrats figes PAR CE FICHIER (dev : ne jamais modifier ce fichier) :
 - ``data/metiers.json`` : dict indexe par code metier (``cyber``, ``avocat``,
   ``medecin`` au minimum), chaque entree avec ``titre`` (str non vide),
   ``quotidien`` (liste d'exactement 3 str non vides), ``qualites`` (liste non
-  vide de str), ``formations`` (liste non vide de str), ``jouable`` (booleen ;
-  seul l'expert cyber est jouable).
+  vide de str), ``formations`` (liste non vide : chaque element est soit une
+  str non vide, soit un dict ``{etape, duree, description}`` aux str non
+  vides), ``jouable`` (booleen ; cyber et avocat jouables, medecin
+  « Bientôt »), ``bon_a_savoir`` (optionnel : liste non vide de str non
+  vides) et ``mentions`` (optionnel : str non vide).
 - Bilan : plus aucune section « Métiers proches de ton profil » (ni
   ``class="metiers-proches"``) ; garde profil (``data-testid="profil"``),
   5 barres (``data-trait`` + libelles accentues + mot « score »), citations
@@ -440,20 +443,51 @@ def test_metiers_json_schema_exact_titre_quotidien_qualites_formations_jouable()
             assert isinstance(point, str) and point.strip() != "", (
                 f"métier {code!r} : chaque point du quotidien doit être non vide"
             )
-        for cle in ("qualites", "formations"):
-            valeurs = entree.get(cle)
-            assert isinstance(valeurs, list) and valeurs, (
-                f"métier {code!r} : {cle} = liste non vide attendue"
+        qualites = entree.get("qualites")
+        assert isinstance(qualites, list) and qualites, (
+            f"métier {code!r} : qualites = liste non vide attendue"
+        )
+        for qualite in qualites:
+            assert isinstance(qualite, str) and qualite.strip() != "", (
+                f"métier {code!r} : qualites ne doit contenir que des chaînes non vides"
             )
-            for valeur in valeurs:
-                assert isinstance(valeur, str) and valeur.strip() != "", (
-                    f"métier {code!r} : {cle} ne doit contenir que des chaînes non vides"
+        formations = entree.get("formations")
+        assert isinstance(formations, list) and formations, (
+            f"métier {code!r} : formations = liste non vide attendue"
+        )
+        for formation in formations:
+            if isinstance(formation, str):
+                assert formation.strip() != "", (
+                    f"métier {code!r} : formation vide interdite"
                 )
+            else:
+                assert isinstance(formation, dict), (
+                    f"métier {code!r} : formation str ou objet attendu"
+                )
+                for cle in ("etape", "duree", "description"):
+                    valeur = formation.get(cle)
+                    assert isinstance(valeur, str) and valeur.strip() != "", (
+                        f"métier {code!r} : formation.{cle} non vide attendue"
+                    )
         assert isinstance(entree.get("jouable"), bool), (
             f"métier {code!r} : jouable (booléen) manquant"
         )
+        bon_a_savoir = entree.get("bon_a_savoir")
+        if bon_a_savoir is not None:
+            assert isinstance(bon_a_savoir, list) and bon_a_savoir, (
+                f"métier {code!r} : bon_a_savoir optionnel = liste non vide attendue"
+            )
+            for point in bon_a_savoir:
+                assert isinstance(point, str) and point.strip() != "", (
+                    f"métier {code!r} : bon_a_savoir que des chaînes non vides"
+                )
+        mentions = entree.get("mentions")
+        if mentions is not None:
+            assert isinstance(mentions, str) and mentions.strip() != "", (
+                f"métier {code!r} : mentions optionnel = chaîne non vide attendue"
+            )
     assert metiers["cyber"]["jouable"] is True, "l'expert cyber doit être jouable"
-    assert metiers["avocat"]["jouable"] is False, "l'avocat doit être « Bientôt »"
+    assert metiers["avocat"]["jouable"] is True, "l'avocat doit être jouable"
     assert metiers["medecin"]["jouable"] is False, "le médecin doit être « Bientôt »"
 
 

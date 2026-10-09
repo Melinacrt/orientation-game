@@ -15,6 +15,18 @@ qui montre ce que tu as aimé faire et quels métiers te correspondent.</p>
       Jouer l'affaire cyber
     </a>
   </li>
+  <li class="carte">
+    <h3>Avocat de la défense</h3>
+    <p>Inès Morel est soupçonnée après une dispute à la sortie du métro.
+    Protège ses droits, examine le dossier et plaide au tribunal.</p>
+    <a class="bouton" href="{{ url_for('partie') }}?affaire=avocat-defense-001">
+      Jouer l'affaire avocat
+    </a>
+  </li>
+  <li class="carte">
+    <h3>Médecin</h3>
+    <p>Examiner, soigner et accompagner les patients au quotidien.</p>
+    <span class="badge badge-bientot">Bientôt</span>
+  </li>
 </ul>
-<p class="bientot">Avocat et médecin arrivent bientôt.</p>
 {% endblock %}

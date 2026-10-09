@@ -2,6 +2,9 @@
 {% block titre %}Bilan — Orientation Game{% endblock %}
 {% block contenu %}
 <h1>Bilan de ton affaire</h1>
+{% if theme == "avocat" %}
+<p class="disclaimer">Affaire fictive et simplifiée, ce n'est pas un conseil juridique.</p>
+{% endif %}
 <section class="carte carte-profil" data-testid="profil">
   <h2>Ton profil : {{ bilan.profil.titre }}</h2>
   <p>{{ bilan.profil.texte }}</p>
@@ -68,9 +71,24 @@
   <h3>Formations possibles</h3>
   <ul class="formations">
     {% for formation in fiche_metier.formations %}
+    {% if formation is mapping %}
+    <li><strong>{{ formation.etape }}</strong> — {{ formation.duree }} : {{ formation.description }}</li>
+    {% else %}
     <li>{{ formation }}</li>
+    {% endif %}
     {% endfor %}
   </ul>
+  {% endif %}
+  {% if fiche_metier.bon_a_savoir %}
+  <h3>Bon à savoir</h3>
+  <ul class="bon-a-savoir">
+    {% for point in fiche_metier.bon_a_savoir %}
+    <li>{{ point }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% if fiche_metier.mentions %}
+  <p class="mentions">{{ fiche_metier.mentions }}</p>
   {% endif %}
 </section>
 {% endif %}

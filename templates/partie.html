@@ -2,15 +2,26 @@
 {% block titre %}{{ affaire.titre }} — Orientation Game{% endblock %}
 {% block contenu %}
 <h1>{{ affaire.titre }}</h1>
-<section class="tableau-de-bord" data-testid="tableau-de-bord" aria-label="Tableau de bord de la crise">
+<section class="tableau-de-bord" data-testid="tableau-de-bord" aria-label="{% if theme == "avocat" %}Tableau de bord de la défense{% else %}Tableau de bord de la crise{% endif %}">
+  {% if theme == "avocat" %}
+  <div class="indicateurs">
+    <p class="indicateur"><span class="indicateur-label">Confiance d'Inès</span> <strong data-testid="confiance-ines">{{ tableau.confiance }}</strong></p>
+    <p class="indicateur"><span class="indicateur-label">Solidité du dossier</span> <strong data-testid="solidite-dossier">{{ tableau.solidite }}</strong></p>
+    <p class="indicateur"><span class="indicateur-label">Temps avant l'audience (min)</span> <strong data-testid="temps-audience">{{ tableau.temps }}</strong></p>
+  </div>
+  {% else %}
   <div class="indicateurs">
     <p class="indicateur"><span class="indicateur-label">Machines infectées</span> <strong data-testid="machines-infectees">{{ tableau.machines_infectees }}</strong></p>
     <p class="indicateur"><span class="indicateur-label">Confiance de la direction</span> <strong data-testid="confiance-direction">{{ tableau.confiance_direction }}</strong></p>
     <p class="indicateur"><span class="indicateur-label">Temps restant (min)</span> <strong data-testid="temps-restant">{{ tableau.temps_restant }}</strong></p>
   </div>
+  {% endif %}
   <p id="chrono" class="chrono" data-testid="chrono" data-debut="{{ debut_ts }}">Temps écoulé — {{ chrono }}</p>
 </section>
 <p class="contexte">{{ affaire.contexte }}</p>
+{% if theme == "avocat" %}
+<p class="disclaimer">Affaire fictive et simplifiée, ce n'est pas un conseil juridique.</p>
+{% endif %}
 {% if message_retour %}
 <p class="message-retour" role="status">{{ message_retour }}</p>
 {% endif %}

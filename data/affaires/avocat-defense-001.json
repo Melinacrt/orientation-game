@@ -8,7 +8,7 @@
   "etapes": {
     "e1": {
       "texte": "Tu es appelé au commissariat : Inès est en garde à vue. Elle est anxieuse et veut raconter immédiatement toute son histoire aux policiers. Tu dois l'assister et l'aider à comprendre la situation. Que fais-tu en premier ?",
-      "image": "img/avocat-garde-a-vue.jpg",
+      "image": "img/01-garde-a-vue.jpg",
       "image_alt": "Un avocat s'entretient avec une jeune femme en garde à vue dans un commissariat sobre.",
       "choix": [
         {
@@ -47,7 +47,7 @@
     },
     "e2": {
       "texte": "Lors de votre entretien, Inès explique qu'elle s'est disputée avec Yanis au sujet d'un sac. Elle affirme avoir voulu récupérer ses affaires, mais ne sait plus précisément dans quel ordre les gestes se sont produits. Elle te demande de lui promettre qu'elle sera libérée. Comment réagis-tu ?",
-      "image": "img/avocat-client.jpg",
+      "image": "img/03-rencontre-cliente.jpg",
       "image_alt": "Un avocat écoute attentivement sa cliente pendant un entretien confidentiel dans un bureau.",
       "choix": [
         {
@@ -84,7 +84,7 @@
     },
     "e3": {
       "texte": "Tu étudies les éléments accessibles du dossier pénal. Le témoignage de Yanis est précis sur la dispute, mais moins clair sur l'identité de la personne qui a pris le téléphone. La vidéo confirme une altercation sans montrer nettement le geste contesté. Un horaire mentionné dans un compte rendu semble aussi différer de celui indiqué dans un autre document. Que fais-tu ?",
-      "image": "img/avocat-dossier.jpg",
+      "image": "img/02-etude-dossier.jpg",
       "image_alt": "Un avocat examine un dossier pénal, des notes et des documents devant un écran affichant une chronologie.",
       "choix": [
         {
@@ -121,7 +121,7 @@
     },
     "e4": {
       "texte": "Tu prépares l'audition de Yanis. Il est convaincu qu'Inès l'a frappé, mais sa première déclaration ne mentionne pas clairement le vol du téléphone. Il a aussi indiqué un horaire légèrement différent de celui du compte rendu. Tu dois le questionner avec fermeté sans transformer l'audition en attaque personnelle. Quelle approche choisis-tu ?",
-      "image": "img/avocat-temoin.jpg",
+      "image": "img/04-interrogatoire-temoin.jpg",
       "image_alt": "Un avocat prépare des questions en consultant les déclarations d'un témoin dans une salle d'audience.",
       "choix": [
         {
@@ -160,7 +160,7 @@
     },
     "e5": {
       "texte": "Dans le couloir du tribunal, le représentant du parquet te propose un échange sur une éventuelle issue moins lourde si Inès reconnaît certains faits. Tu sais qu'elle conteste toujours le geste violent et le vol. Tu dois défendre ses intérêts tout en respectant sa volonté et la réalité du dossier. Comment réagis-tu ?",
-      "image": "img/avocat-couloir.jpg",
+      "image": "img/05-echange-parquet.jpg",
       "image_alt": "Un avocat et un représentant du parquet discutent discrètement dans le couloir d'un tribunal.",
       "choix": [
         {
@@ -197,7 +197,7 @@
     },
     "e6": {
       "texte": "À l'audience, tu peux interroger Yanis sur les limites de son témoignage et discuter la portée de la vidéo. Une note versée au dossier mentionne également une possible irrégularité dans le déroulement d'un acte, mais tu n'as pas encore assez d'éléments pour en mesurer les conséquences. Tu prépares ta plaidoirie. Quelle stratégie adoptes-tu ?",
-      "image": "img/avocat-plaidoirie.jpg",
+      "image": "img/06-plaidoirie.jpg",
       "image_alt": "Un avocat prépare sa plaidoirie devant une salle d'audience, avec le dossier pénal ouvert sur son pupitre.",
       "choix": [
         {
@@ -226,7 +226,7 @@
           "id": "c18",
           "label": "Inventer un alibi pour renforcer la défense",
           "traits": {},
-          "gravite": 3,
+          "gravite": 6,
           "consequence": "Tu présentes sciemment une version inventée comme un fait réel. Tu trahis tes obligations professionnelles, détruis la confiance de ta cliente et risques de discréditer toute la défense, voire de déclencher des conséquences disciplinaires ou judiciaires selon les faits.",
           "suite": "e7"
         }
@@ -234,7 +234,7 @@
     },
     "e7": {
       "texte": "Tu termines la préparation de la défense. Inès te confie qu'elle a supprimé un message envoyé à une amie après la dispute, parce qu'elle avait honte de son comportement. Tu ne sais pas encore si ce message est pertinent. Tu dois décider comment gérer cette information et présenter ton dossier sans trahir le secret professionnel. Que fais-tu ?",
-      "image": "img/avocat-plaidoirie.jpg",
+      "image": "img/06-plaidoirie.jpg",
       "image_alt": "Un avocat relit ses notes dans une salle d'audience vide avant de défendre sa cliente.",
       "choix": [
         {
@@ -263,7 +263,7 @@
           "id": "c21",
           "label": "Détruire d'autres traces et cacher leur existence",
           "traits": {},
-          "gravite": 3,
+          "gravite": 6,
           "consequence": "Tu encourages la destruction ou la dissimulation d'éléments potentiellement pertinents. Tu franchis une limite déontologique majeure et exposes ta cliente ainsi que toi-même à des conséquences graves, tout en fragilisant profondément la défense.",
           "suite": null
         }
@@ -272,12 +272,12 @@
   },
   "fins": [
     {
-      "gravite_max": 2,
+      "gravite_max": 1,
       "titre": "Une défense rigoureuse",
       "texte": "Tu as protégé les droits d'Inès, examiné les preuves à charge et à décharge et distingué les faits établis des incertitudes. Tu as préparé une défense honnête, respecté la confidentialité et évité de promettre un résultat. Le tribunal reste seul décisionnaire : ton travail ne garantit pas l'issue, mais il donne à ta cliente une défense sérieuse."
     },
     {
-      "gravite_max": 6,
+      "gravite_max": 4,
       "titre": "Une défense sous tension",
       "texte": "Tu as défendu Inès, mais certaines décisions ont limité la qualité de ton enquête ou compliqué la relation avec ta cliente. Tu as encore pu construire une argumentation utile, à condition de revenir aux faits vérifiables et de corriger les choix fragiles. Cette affaire montre que défendre quelqu'un implique des arbitrages et une grande discipline."
     },

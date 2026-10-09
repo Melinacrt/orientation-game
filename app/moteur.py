@@ -22,27 +22,133 @@ _CONFIANCE_MIN = 0
 _CONFIANCE_MAX = 100
 _TEMPS_BUDGET_MINUTES = 120
 _TEMPS_COUT_PAR_COUP = 15
+_SOLIDITE_INITIALE = 10
+_SOLIDITE_MAX = 20
+_SOLIDITE_PERTE_PAR_GRAVITE = 2
+
+_TITRES_PROFILS_AVOCAT = frozenset(
+    {
+        "Stratège du dossier",
+        "Orateur de l'audience",
+        "Enquêteur du contradictoire",
+        "Défenseur à l'écoute",
+        "Gardien des droits",
+    }
+)
+
+
+def _est_affaire_avocat(affaire: object) -> bool:
+    """Indique si une affaire relève du métier avocat (thème tribunal)."""
+    if not isinstance(affaire, dict):
+        return False
+    return affaire.get("metier") == "avocat" or affaire.get("theme") == "avocat"
+
+
+def _est_profil_avocat(profil: object) -> bool:
+    """Indique si un profil appartient au métier avocat (id ou titre)."""
+    if not isinstance(profil, dict):
+        return False
+    identifiant = profil.get("id", "")
+    if isinstance(identifiant, str) and identifiant.startswith("avocat-"):
+        return True
+    return profil.get("titre") in _TITRES_PROFILS_AVOCAT
+
+
+def _profils_du_metier(affaire: dict, profils: list) -> list:
+    """Restreint les profils au métier de l'affaire jouée (repli : tous).
+
+    Une affaire d'avocat est évaluée avec les seuls profils avocat, une
+    affaire cyber avec les seuls profils cyber. Si le filtrage ne garde
+    aucun profil (listes personnalisées des tests), la liste complète
+    est conservée : le comportement historique reste inchangé.
+    """
+    metier = affaire.get("metier") if isinstance(affaire, dict) else None
+    if metier == "avocat":
+        restreints = [p for p in profils if _est_profil_avocat(p)]
+        if restreints:
+            return restreints
+    elif metier == "cyber":
+        restreints = [p for p in profils if not _est_profil_avocat(p)]
+        if restreints:
+            return restreints
+    return list(profils)
+
+
+def _tableau_avocat(etat: dict) -> dict:
+    """Tableau de bord de l'affaire avocat (fonction pure, sans IA).
+
+    Formule déterministe (état -> valeurs) :
+    - ``confiance`` (Confiance d'Inès) = 80 + 5 × (convaincre + aider)
+      − 10 × gravité, borné entre 0 et 100 (80 au départ).
+    - ``solidite`` (Solidité du dossier) = 10 + (analyser + enqueter)
+      − 2 × gravité, borné entre 0 et 20 (10 au départ).
+    - ``temps`` (Temps avant l'audience) = max(0, 120 − 15 × nb_coups)
+      en minutes (budget fictif, distinct du chronomètre temps réel).
+    """
+    if not isinstance(etat, dict):
+        etat = {}
+    gravite = etat.get("gravite", 0)
+    if isinstance(gravite, bool) or not isinstance(gravite, int) or gravite < 0:
+        gravite = 0
+    scores = etat.get("scores", {})
+    if not isinstance(scores, dict):
+        scores = {}
+
+    def _points(trait: str) -> int:
+        valeur = scores.get(trait, 0)
+        if isinstance(valeur, bool) or not isinstance(valeur, int):
+            return 0
+        return valeur
+
+    convaincre = _points("convaincre")
+    aider = _points("aider")
+    analyser = _points("analyser")
+    enqueter = _points("enqueter")
+    historique = etat.get("historique", [])
+    nb_coups = len(historique) if isinstance(historique, list) else 0
+    confiance = _CONFIANCE_INITIALE
+    confiance += _CONFIANCE_GAIN_PAR_POINT * (convaincre + aider)
+    confiance -= _CONFIANCE_PERTE_PAR_GRAVITE * gravite
+    confiance = max(_CONFIANCE_MIN, min(_CONFIANCE_MAX, confiance))
+    solidite = _SOLIDITE_INITIALE + (analyser + enqueter)
+    solidite -= _SOLIDITE_PERTE_PAR_GRAVITE * gravite
+    solidite = max(0, min(_SOLIDITE_MAX, solidite))
+    temps = max(0, _TEMPS_BUDGET_MINUTES - _TEMPS_COUT_PAR_COUP * nb_coups)
+    return {
+        "confiance": confiance,
+        "solidite": solidite,
+        "temps": temps,
+    }
 
 
 def tableau_de_bord(affaire: dict, etat: dict) -> dict:
-    """Calcule le tableau de bord de la salle de crise (fonction pure, sans IA).
+    """Calcule le tableau de bord de la partie (fonction pure, sans IA).
 
-    Formule déterministe (état -> valeurs) :
+    Formule cyber (affaires cyber ou sans métier avocat, historique) :
     - ``machines_infectees`` = min(1 + gravité, 50) (1 au départ, borné à 50).
     - ``confiance_direction`` = 80 + 5 × (convaincre + aider) − 10 × gravité,
       borné entre 0 et 100 (80 au départ).
     - ``temps_restant`` = max(0, 120 − 15 × nb_coups) en minutes (budget fictif,
       distinct du chronomètre temps réel).
 
+    Formule avocat (``affaire["metier"]`` ou ``affaire["theme"]`` vaut
+    ``"avocat"``, ambiance tribunal) :
+    - ``confiance`` (Confiance d'Inès) = 80 + 5 × (convaincre + aider)
+      − 10 × gravité, borné entre 0 et 100 (80 au départ).
+    - ``solidite`` (Solidité du dossier) = 10 + (analyser + enqueter)
+      − 2 × gravité, borné entre 0 et 20 (10 au départ).
+    - ``temps`` (Temps avant l'audience) = max(0, 120 − 15 × nb_coups).
+
     Args:
-        affaire: Dictionnaire de l'affaire (ignoré, conservé pour la signature).
+        affaire: Dictionnaire de l'affaire (le métier ou le thème décide
+            de la formule ; toute autre affaire garde la formule cyber).
         etat: État de la partie (``gravite``, ``scores``, ``historique``).
 
     Returns:
-        Un dictionnaire ``{"machines_infectees", "confiance_direction",
-        "temps_restant"}`` aux valeurs entières bornées.
+        Le dictionnaire du tableau de bord aux valeurs entières bornées.
     """
-    _ = affaire
+    if _est_affaire_avocat(affaire):
+        return _tableau_avocat(etat)
     if not isinstance(etat, dict):
         etat = {}
     gravite = etat.get("gravite", 0)
@@ -181,7 +287,8 @@ def calculer_bilan(affaire: dict, etat: dict, profils: object) -> dict:
         "traits_dominants", "gravite_max", "niveau_gravite"}`` où ``fin``
         est la première fin dont ``gravite_max`` couvre la gravité,
         ``citations`` reprend les labels et conséquences réellement
-        choisis, ``profil`` est le profil dont les traits dominants
+        choisis, ``profil`` est le profil du métier de l'affaire jouée
+        (avocat ou cyber) dont les traits dominants
         scorent le mieux (ex æquo : le premier), ``metiers_proches``
         reste la liste des noms (compatibilité), ``metiers_details``
         porte les phrases de lien et le statut jouable, et
@@ -193,7 +300,7 @@ def calculer_bilan(affaire: dict, etat: dict, profils: object) -> dict:
     """
     _valider_affaire(affaire)
     _valider_etat(etat)
-    liste_profils = _charger_profils(profils)
+    liste_profils = _profils_du_metier(affaire, _charger_profils(profils))
 
     gravite = int(etat["gravite"])
     fin = _choisir_fin(affaire["fins"], gravite)
