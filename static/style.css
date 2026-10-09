@@ -1,18 +1,34 @@
+/* Thème salle de crise : fond sombre, police terminal, accents vert/rouge. */
+
+:root {
+  --fond: #0b0f14;
+  --panneau: #131c28;
+  --panneau-clair: #1a2536;
+  --texte: #d9e6f2;
+  --texte-doux: #93a5bb;
+  --bordure: #2a3a52;
+  --vert: #00e676;
+  --rouge: #ff5252;
+  --info: #4da3ff;
+  --accent: #00e676;
+}
+
 * {
   box-sizing: border-box;
 }
 
 body {
+  background: #0b0f14;
   margin: 0;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family: "JetBrains Mono", Consolas, "Courier New", monospace;
   line-height: 1.6;
-  color: #1d2733;
-  background: #f4f6fb;
+  color: #d9e6f2;
 }
 
 .bandeau {
-  background: #1d2733;
-  color: #fff;
+  background: #070b11;
+  color: #d9e6f2;
+  border-bottom: 2px solid #00e676;
 }
 
 .navigation {
@@ -25,13 +41,18 @@ body {
 }
 
 .navigation a {
-  color: #fff;
+  color: #00e676;
   text-decoration: none;
+}
+
+.navigation a:hover {
+  text-decoration: underline;
 }
 
 .navigation .logo {
   font-weight: 700;
   margin-right: auto;
+  color: #d9e6f2;
 }
 
 .contenu {
@@ -43,6 +64,12 @@ body {
 h1 {
   font-size: 1.9rem;
   margin-bottom: 0.5rem;
+  color: #d9e6f2;
+}
+
+h2,
+h3 {
+  color: #d9e6f2;
 }
 
 .accroche {
@@ -50,34 +77,111 @@ h1 {
   font-weight: 600;
 }
 
+/* Tableau de bord : en haut de chaque étape. */
+.tableau-de-bord {
+  background: #070b11;
+  border: 1px solid #2a3a52;
+  border-top: 3px solid #ff5252;
+  border-radius: 0.75rem;
+  padding: 1rem 1.2rem;
+  margin: 1.2rem 0;
+}
+
+.indicateurs {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 0;
+}
+
+.indicateur {
+  flex: 1 1 10rem;
+  margin: 0;
+  padding: 0.6rem 0.8rem;
+  background: #1a2536;
+  border: 1px solid #2a3a52;
+  border-radius: 0.5rem;
+}
+
+.indicateur-label {
+  display: block;
+  font-size: 0.8rem;
+  color: #93a5bb;
+}
+
+.indicateur strong {
+  font-size: 1.4rem;
+}
+
+.indicateur strong[data-testid="machines-infectees"] {
+  color: #ff5252;
+}
+
+.indicateur strong[data-testid="confiance-direction"] {
+  color: #00e676;
+}
+
+.indicateur strong[data-testid="temps-restant"] {
+  color: #4da3ff;
+}
+
+.chrono {
+  margin: 0.8rem 0 0;
+  padding: 0.4rem 0.8rem;
+  display: inline-block;
+  background: #070b11;
+  border: 1px dashed #ff5252;
+  border-radius: 0.5rem;
+  color: #ff5252;
+  font-weight: 700;
+}
+
+/* Illustration d'étape : en grand au-dessus du texte. */
+.illustration {
+  display: block;
+  width: 100%;
+  max-height: 22rem;
+  object-fit: cover;
+  border: 1px solid #2a3a52;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
 .carte {
-  background: #fff;
-  border: 1px solid #d9e1ec;
+  background: #131c28;
+  border: 1px solid #2a3a52;
   border-radius: 0.75rem;
   padding: 1.2rem;
   margin: 1.2rem 0;
-  box-shadow: 0 1px 3px rgb(29 39 51 / 0.08);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.5);
 }
 
 .contexte,
 .etape {
-  background: #fff;
-  border-left: 4px solid #2f6fed;
+  background: #131c28;
+  border-left: 4px solid #4da3ff;
   padding: 0.8rem 1rem;
   border-radius: 0 0.5rem 0.5rem 0;
+  color: #d9e6f2;
 }
 
 .consequence {
-  background: #eef7ee;
-  border-left: 4px solid #2e8b57;
+  background: #0e2417;
+  border-left: 4px solid #00e676;
   padding: 0.8rem 1rem;
   border-radius: 0 0.5rem 0.5rem 0;
+  color: #d9e6f2;
 }
 
 fieldset {
-  border: 1px solid #d9e1ec;
+  border: 1px solid #2a3a52;
   border-radius: 0.5rem;
   padding: 1rem;
+}
+
+legend {
+  color: #00e676;
+  font-weight: 700;
 }
 
 .choix {
@@ -89,19 +193,24 @@ fieldset {
 
 .bouton {
   display: inline-block;
-  background: #2f6fed;
-  color: #fff;
+  background: #00e676;
+  color: #070b11;
   border: none;
   border-radius: 0.5rem;
   padding: 0.65rem 1.2rem;
   font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
   text-decoration: none;
   margin-top: 0.8rem;
 }
 
 .bouton:hover {
-  background: #1f54c4;
+  background: #00c864;
+}
+
+a {
+  color: #00e676;
 }
 
 .metiers {
@@ -110,7 +219,7 @@ fieldset {
 }
 
 .bientot {
-  color: #5a6b7f;
+  color: #93a5bb;
   font-style: italic;
 }
 
@@ -129,14 +238,15 @@ fieldset {
 
 .etiquette {
   display: inline-block;
-  background: #e6edff;
+  background: #1a2536;
+  border: 1px solid #2a3a52;
   border-radius: 999px;
   padding: 0.15rem 0.7rem;
   margin: 0.1rem;
 }
 
 .carte-profil {
-  border-left: 4px solid #2f6fed;
+  border-left: 4px solid #00e676;
 }
 
 .metiers-proches {
@@ -147,7 +257,7 @@ fieldset {
 
 .metier {
   padding: 0.6rem 0;
-  border-top: 1px solid #e3e9f2;
+  border-top: 1px solid #2a3a52;
 }
 
 .metier:first-child {
@@ -155,7 +265,7 @@ fieldset {
 }
 
 .lien-metier {
-  color: #44566c;
+  color: #93a5bb;
 }
 
 .badge {
@@ -168,15 +278,15 @@ fieldset {
 }
 
 .badge-jouable {
-  background: #e0f2e4;
-  color: #1d6b32;
-  border: 1px solid #1d6b32;
+  background: #0e2417;
+  color: #00e676;
+  border: 1px solid #00e676;
 }
 
 .badge-bientot {
-  background: #f0f2f7;
-  color: #5a6b7f;
-  border: 1px solid #5a6b7f;
+  background: #1a2536;
+  color: #93a5bb;
+  border: 1px solid #93a5bb;
 }
 
 .barre {
@@ -193,7 +303,7 @@ fieldset {
 }
 
 .barre.dominant {
-  background: #eef4ff;
+  background: #0e2417;
   border-radius: 0.5rem;
   padding: 0.3rem 0.5rem;
 }
@@ -201,7 +311,7 @@ fieldset {
 .point-fort {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #1f54c4;
+  color: #00e676;
 }
 
 .valeur {
@@ -220,13 +330,13 @@ meter {
 
 hr.separateur {
   border: none;
-  border-top: 2px solid #d9e1ec;
+  border-top: 2px solid #2a3a52;
   margin: 1.6rem 0;
 }
 
 .message-erreur {
   font-weight: 600;
-  color: #8f1d1d;
+  color: #ff5252;
 }
 
 .liens {
@@ -235,9 +345,17 @@ hr.separateur {
 
 .pied {
   text-align: center;
-  color: #5a6b7f;
+  color: #93a5bb;
   font-size: 0.9rem;
   padding: 1.5rem 1rem;
+}
+
+.vert {
+  color: #00e676;
+}
+
+.rouge {
+  color: #ff5252;
 }
 
 @media (max-width: 36rem) {
@@ -248,4 +366,107 @@ hr.separateur {
   .contenu {
     padding: 1rem 0.8rem 2rem;
   }
+
+  .indicateurs {
+    flex-direction: column;
+  }
+
+  .illustration {
+    max-height: 14rem;
+  }
+}
+
+/* Thèmes par affaire : la classe theme-<nom> est posée sur <body>.
+   Le style historique (salle de crise sombre) reste le rendu du
+   thème cyber ; le thème neutre (accueil, erreurs) est clair et sobre. */
+
+.theme-cyber {
+  background: #0b0f14;
+  color: #d9e6f2;
+}
+
+.theme-cyber .bandeau {
+  background: #070b11;
+  color: #d9e6f2;
+  border-bottom: 2px solid #00e676;
+}
+
+.theme-cyber .carte {
+  background: #131c28;
+  border: 1px solid #2a3a52;
+}
+
+.theme-neutre {
+  background: #faf7f0;
+  color: #1c2430;
+}
+
+.theme-neutre .bandeau {
+  background: #ffffff;
+  color: #1c2430;
+  border-bottom: 2px solid #1c6e4d;
+}
+
+.theme-neutre .navigation a {
+  color: #1c6e4d;
+}
+
+.theme-neutre .navigation .logo {
+  color: #1c2430;
+}
+
+.theme-neutre h1,
+.theme-neutre h2,
+.theme-neutre h3 {
+  color: #1c2430;
+}
+
+.theme-neutre .carte,
+.theme-neutre .contexte,
+.theme-neutre .etape,
+.theme-neutre .tableau-de-bord,
+.theme-neutre .indicateur {
+  background: #ffffff;
+  color: #1c2430;
+  border-color: #d8d2c4;
+}
+
+.theme-neutre .accroche,
+.theme-neutre .consequence {
+  color: #1c2430;
+}
+
+.theme-neutre a {
+  color: #1c6e4d;
+}
+
+.theme-neutre .pied,
+.theme-neutre .bientot,
+.theme-neutre .lien-metier {
+  color: #4d5a6a;
+}
+
+.theme-avocat {
+  background: #f3ede2;
+  color: #2a2118;
+}
+
+.theme-avocat .bandeau {
+  background: #2a2118;
+  color: #f3ede2;
+  border-bottom: 2px solid #b08d3e;
+}
+
+.theme-avocat .carte {
+  background: #fffdf7;
+  border: 1px solid #c9bfa8;
+}
+
+.message-retour {
+  background: #fff8e1;
+  border-left: 4px solid #b08d3e;
+  padding: 0.8rem 1rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+  color: #1c2430;
+  font-weight: 600;
 }

@@ -10,6 +10,7 @@ propre en français, jamais une traceback brute.
 from __future__ import annotations
 
 import copy
+import json
 import os
 import re
 from pathlib import Path
@@ -23,9 +24,12 @@ from app.moteur import TRAITS, calculer_bilan, jouer_coup, nouvelle_partie
 RACINE = Path(__file__).resolve().parents[1]
 DOSSIER_AFFAIRES = RACINE / "data" / "affaires"
 FICHIER_PROFILS = RACINE / "data" / "profils.json"
+FICHIER_METIERS = RACINE / "data" / "metiers.json"
 LONGUEUR_MAX = 200
 MOTIF_AFFAIRE = re.compile(r"^[a-z0-9-]+$")
+MOTIF_THEME = re.compile(r"^[a-z0-9-]+$")
 CLE_SECRETE_DEV = "cle-dev-locale-non-secrete-a-changer"
+MESSAGE_RETOUR_ARRIERE = "Tu étais revenu en arrière : voici l'étape en cours."
 LIBELLES_TRAITS = {
     "analyser": "Analyser",
     "convaincre": "Convaincre",
@@ -50,7 +54,7 @@ def creer_app() -> Flask:
 
     @application.get("/")
     def accueil() -> str:
-        return render_template("accueil.html")
+        return render_template("accueil.html", theme="neutre")
 
     @application.get("/partie")
     def partie() -> Any:
@@ -67,6 +71,13 @@ def creer_app() -> Flask:
         etat = nouvelle_partie(affaire)
         session["affaire_id"] = affaire_id
         session["etat"] = etat
+        # Nouvelle partie : le message de retour arrière ne doit pas fuiter
+        # d'une ancienne partie et le chronomètre repart de zéro (jamais
+        # écrasé ensuite : jouer / afficher_jouer / bilan le conservent).
+        session.pop("message_retour", None)
+        import time
+
+        session["debut_ts"] = time.time()
         return _page_partie(affaire, affaire_id, etat, consequence=None), 200
 
     @application.get("/jouer")
@@ -88,6 +99,14 @@ def creer_app() -> Flask:
             if courante is None:
                 return redirect(url_for("bilan"), code=303)
             if etape_id != courante:
+                etapes = affaire.get("etapes", {})
+                if isinstance(etapes, dict) and etape_id in etapes:
+                    # Retour arrière : étape connue de l'affaire mais qui
+                    # n'est plus l'étape courante (bouton précédent du
+                    # navigateur). La partie reste intacte : on mémorise un
+                    # message affiché une seule fois sur l'étape en cours.
+                    session["message_retour"] = MESSAGE_RETOUR_ARRIERE
+                    return redirect(url_for("afficher_jouer"), code=303)
                 raise ValueError(
                     "Cette étape ne correspond pas à la partie en cours : "
                     "choix invalide. Retour à l'accueil pour recommencer."
@@ -163,6 +182,26 @@ def _consequence_derniere(etat: dict) -> str | None:
     return None
 
 
+def _theme_affaire(affaire: dict) -> str:
+    """Nom du thème d'habillage d'une affaire (repli « cyber »).
+
+    Les anciennes sessions ou affaires sans ``theme`` restent habillées
+    avec le thème cyber ; un thème invalide ne fait jamais échouer la page.
+    """
+    theme = affaire.get("theme", "cyber")
+    if isinstance(theme, str) and MOTIF_THEME.match(theme):
+        return theme
+    return "cyber"
+
+
+def _message_retour_une_fois() -> str | None:
+    """Lit puis efface le message de retour arrière (affiché une fois)."""
+    message = session.pop("message_retour", None)
+    if isinstance(message, str) and message.strip():
+        return message
+    return None
+
+
 def _reponse_etape_ou_accueil() -> Any:
     etat_brut = session.get("etat")
     affaire_stockee = session.get("affaire_id")
@@ -180,16 +219,35 @@ def _reponse_etape_ou_accueil() -> Any:
     etapes = affaire.get("etapes", {})
     if not isinstance(courante, str) or courante not in etapes:
         return redirect(url_for("accueil"))
-    return _page_partie(affaire, affaire_id, etat, _consequence_derniere(etat)), 200
+    message = _message_retour_une_fois()
+    return (
+        _page_partie(
+            affaire, affaire_id, etat, _consequence_derniere(etat), message
+        ),
+        200,
+    )
 
 
 def _page_partie(
-    affaire: dict, affaire_id: str, etat: dict, consequence: str | None
+    affaire: dict,
+    affaire_id: str,
+    etat: dict,
+    consequence: str | None,
+    message_retour: str | None = None,
 ) -> str:
+    from app.moteur import tableau_de_bord
+
     etape_id = str(etat.get("etape_courante"))
     etape = affaire["etapes"][etape_id]
     historique = etat.get("historique")
     numero = len(historique) + 1 if isinstance(historique, list) else 1
+    tableau = tableau_de_bord(affaire, etat)
+    image_url = _image_url_etape(etape)
+    if isinstance(etape, dict) and image_url is not None:
+        image_alt = etape.get("image_alt")
+    else:
+        image_alt = None
+    debut = _debut_ts()
     return render_template(
         "partie.html",
         affaire=affaire,
@@ -197,13 +255,136 @@ def _page_partie(
         etape_id=etape_id,
         etape=etape,
         consequence=consequence,
+        message_retour=message_retour,
         numero=numero,
         total=len(affaire["etapes"]),
+        tableau=tableau,
+        image_url=image_url,
+        image_alt=image_alt,
+        chrono=_texte_chrono(debut),
+        debut_ts=int(debut),
+        theme=_theme_affaire(affaire),
     )
+
+
+def _debut_ts() -> float:
+    """Heure de début de la partie (session, posée une fois, jamais écrasée)."""
+    import time
+
+    valeur = session.get("debut_ts")
+    if isinstance(valeur, bool) or not isinstance(valeur, (int, float)):
+        valeur = time.time()
+        session["debut_ts"] = valeur
+    return float(valeur)
+
+
+def _texte_chrono(debut: float) -> str:
+    """Temps écoulé depuis ``debut`` au format MM:SS (chrono temps réel)."""
+    import time
+
+    ecoule = max(0, int(time.time() - debut))
+    return f"{ecoule // 60:02d}:{ecoule % 60:02d}"
+
+
+def _image_url_etape(etape: object) -> str | None:
+    """URL sûre ``/static/img/...`` d'une étape, ou None.
+
+    Ne renvoie une URL que si l'étape déclare une ``image`` valide (chaîne
+    relative sous ``img/``, minuscules/chiffres/tirets, extension autorisée,
+    200 caractères maximum, sans ``..`` ni URL) avec un ``image_alt`` non
+    vide, et si le fichier existe vraiment dans ``static/img/``. Sinon None :
+    la page reste en 200 sans <img> cassé ni traceback.
+    """
+    motif = re.compile(r"^img/[a-z0-9\-_/]+\.(png|jpg|jpeg|webp|svg)$")
+    if not isinstance(etape, dict):
+        return None
+    image = etape.get("image")
+    if image is None:
+        return None
+    alt = etape.get("image_alt")
+    if (
+        not isinstance(image, str)
+        or not image.strip()
+        or len(image) > LONGUEUR_MAX
+        or ".." in image
+        or "\\" in image
+        or image.startswith(("/", "http"))
+        or not motif.match(image)
+    ):
+        return None
+    if not isinstance(alt, str) or not alt.strip():
+        return None
+    dossier = RACINE / "static" / "img"
+    candidat = dossier / image[len("img/") :]
+    try:
+        cible = candidat.resolve()
+        base = dossier.resolve()
+    except OSError:
+        return None
+    if base not in cible.parents:
+        return None
+    if not cible.is_file():
+        return None
+    return url_for("static", filename=image)
+
+
+def _charger_metiers() -> dict:
+    """Charge ``data/metiers.json`` (dict par code métier, repli ``{}``).
+
+    Toute anomalie (fichier absent ou illisible) donne un dictionnaire vide :
+    le bilan affiche alors un repli propre, jamais de traceback ni de 500.
+    """
+    try:
+        contenu = FICHIER_METIERS.read_text(encoding="utf-8")
+    except OSError:
+        return {}
+    try:
+        donnees = json.loads(contenu)
+    except ValueError:
+        return {}
+    return donnees if isinstance(donnees, dict) else {}
+
+
+def _fiche_et_autres_metiers(affaire: dict) -> tuple[dict | None, list]:
+    """Fiche du métier joué + liste des autres métiers (repli propre).
+
+    La fiche est résolue via ``affaire["metier"]`` puis ``affaire["theme"]``.
+    Chaque entrée retournée est un dict ``{"code", "titre", "jouable"}`` ;
+    les entrées malformées sont ignorées sans lever d'erreur.
+    """
+    metiers = _charger_metiers()
+    if not metiers:
+        return None, []
+    code: str | None = None
+    for cle in (affaire.get("metier"), affaire.get("theme")):
+        if isinstance(cle, str) and cle in metiers:
+            code = cle
+            break
+    fiche: dict | None = None
+    if code is not None:
+        candidate = metiers.get(code)
+        fiche = candidate if isinstance(candidate, dict) else None
+    autres = []
+    for codemetier, entree in metiers.items():
+        if not isinstance(entree, dict):
+            continue
+        titre = entree.get("titre")
+        if not isinstance(titre, str) or not titre.strip():
+            continue
+        jouable = entree.get("jouable")
+        autres.append(
+            {
+                "code": codemetier,
+                "titre": titre,
+                "jouable": jouable if isinstance(jouable, bool) else False,
+            }
+        )
+    return fiche, autres
 
 
 def _page_bilan(affaire: dict, affaire_id: str, etat: dict, bilan: dict) -> str:
     _ = etat
+    fiche_metier, autres_metiers = _fiche_et_autres_metiers(affaire)
     return render_template(
         "bilan.html",
         affaire=affaire,
@@ -213,9 +394,11 @@ def _page_bilan(affaire: dict, affaire_id: str, etat: dict, bilan: dict) -> str:
         libelles=dict(LIBELLES_TRAITS),
         score_max=_score_max_bilan(bilan),
         traits_dominants=_dominants_bilan(bilan),
-        metiers_details=_metiers_details_bilan(bilan),
         niveau_gravite=_niveau_gravite_bilan(bilan),
         gravite_max=_gravite_max_bilan(bilan),
+        theme=_theme_affaire(affaire),
+        fiche_metier=fiche_metier,
+        autres_metiers=autres_metiers,
     )
 
 
@@ -261,27 +444,6 @@ def _score_nombre(scores: dict, trait: str) -> int:
     return 0
 
 
-def _metiers_details_bilan(bilan: dict) -> list:
-    details = bilan.get("metiers_details")
-    if isinstance(details, list) and details:
-        return list(details)
-    proches = bilan.get("metiers_proches")
-    if not isinstance(proches, list):
-        return []
-    normalises = []
-    for entree in proches:
-        if isinstance(entree, dict):
-            nom = str(entree.get("nom", entree.get("titre", "")))
-            lien = str(entree.get("lien", entree.get("pourquoi", "")))
-            jouable = entree.get("jouable", entree.get("disponible"))
-        else:
-            nom, lien, jouable = str(entree), "", None
-        if not isinstance(jouable, bool):
-            jouable = nom.strip().lower() == "expert cyber"
-        normalises.append({"nom": nom, "lien": lien, "jouable": jouable})
-    return normalises
-
-
 def _niveau_gravite_bilan(bilan: dict) -> str:
     niveau = bilan.get("niveau_gravite")
     if isinstance(niveau, str) and niveau.strip():
@@ -304,7 +466,10 @@ def _gravite_max_bilan(bilan: dict) -> int:
 
 
 def _page_erreur(code: int, message: str) -> tuple[str, int]:
-    return render_template("erreur.html", code=code, message=message), code
+    return (
+        render_template("erreur.html", code=code, message=message, theme="neutre"),
+        code,
+    )
 
 
 def _message_erreur(exc: Any, defaut: str) -> str:

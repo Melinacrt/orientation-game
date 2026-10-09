@@ -1,12 +1,15 @@
 {
   "id": "cyber-001",
   "metier": "cyber",
+  "theme": "cyber",
   "titre": "Alerte sur le serveur RH",
   "contexte": "Lundi 8h. Un employé des RH signale que ses fichiers sont chiffrés et qu'un message demande une rançon.",
   "debut": "e1",
   "etapes": {
     "e1": {
       "texte": "Que fais-tu en premier ?",
+      "image": "img/01-salle-serveurs.png",
+      "image_alt": "Salle des serveurs avec des voyants d'alerte rouges.",
       "choix": [
         {
           "id": "c1",

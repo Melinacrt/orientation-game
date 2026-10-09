@@ -2,12 +2,26 @@
 {% block titre %}{{ affaire.titre }} — Orientation Game{% endblock %}
 {% block contenu %}
 <h1>{{ affaire.titre }}</h1>
+<section class="tableau-de-bord" data-testid="tableau-de-bord" aria-label="Tableau de bord de la crise">
+  <div class="indicateurs">
+    <p class="indicateur"><span class="indicateur-label">Machines infectées</span> <strong data-testid="machines-infectees">{{ tableau.machines_infectees }}</strong></p>
+    <p class="indicateur"><span class="indicateur-label">Confiance de la direction</span> <strong data-testid="confiance-direction">{{ tableau.confiance_direction }}</strong></p>
+    <p class="indicateur"><span class="indicateur-label">Temps restant (min)</span> <strong data-testid="temps-restant">{{ tableau.temps_restant }}</strong></p>
+  </div>
+  <p id="chrono" class="chrono" data-testid="chrono" data-debut="{{ debut_ts }}">Temps écoulé — {{ chrono }}</p>
+</section>
 <p class="contexte">{{ affaire.contexte }}</p>
+{% if message_retour %}
+<p class="message-retour" role="status">{{ message_retour }}</p>
+{% endif %}
 {% if consequence %}
 <p class="consequence">{{ consequence }}</p>
 {% endif %}
 <section class="carte">
   <h2>Étape {{ numero }} sur {{ total }}</h2>
+  {% if image_url %}
+  <img class="illustration" src="{{ image_url }}" alt="{{ image_alt }}" loading="lazy">
+  {% endif %}
   <p class="etape">{{ etape.texte }}</p>
   <form method="post" action="{{ url_for('jouer') }}">
     <input type="hidden" name="affaire" value="{{ affaire_id }}">
@@ -28,4 +42,19 @@
   <a href="{{ url_for('bilan') }}">Voir mon bilan en cours</a> ·
   <a href="{{ url_for('accueil') }}">Retour à l'accueil</a>
 </p>
+<script>
+(function () {
+  var chrono = document.getElementById("chrono");
+  if (!chrono) { return; }
+  var debut = parseInt(chrono.getAttribute("data-debut"), 10);
+  if (isNaN(debut)) { return; }
+  function deux(n) { return String(n).padStart(2, "0"); }
+  function tick() {
+    var ecoule = Math.floor(Date.now() / 1000) - debut;
+    if (ecoule < 0) { ecoule = 0; }
+    chrono.textContent = "Temps écoulé — " + deux(Math.floor(ecoule / 60)) + ":" + deux(ecoule % 60);
+  }
+  setInterval(tick, 1000);
+})();
+</script>
 {% endblock %}

@@ -1,0 +1,290 @@
+{
+  "id": "avocat-defense-001",
+  "metier": "avocat",
+  "theme": "avocat",
+  "titre": "L'affaire du dernier métro",
+  "contexte": "Mardi, 9 h. Inès Morel, 19 ans, est soupçonnée d'avoir agressé Yanis Benali à la sortie d'une station de métro, puis d'avoir volé son téléphone. Yanis a été blessé et affirme reconnaître Inès. Une caméra a filmé une partie de la scène, mais les images sont floues. Inès reconnaît une dispute, nie avoir frappé Yanis et affirme avoir tenté de récupérer son propre sac, emporté dans la confusion. Tu es l'avocate ou l'avocat chargé de sa défense. Tu dois protéger ses droits, examiner les éléments à charge et à décharge, préparer une stratégie honnête et défendre ses intérêts sans jamais fabriquer de preuve ni tromper la justice. L'affaire est fictive et plusieurs éléments restent incertains.",
+  "debut": "e1",
+  "etapes": {
+    "e1": {
+      "texte": "Tu es appelé au commissariat : Inès est en garde à vue. Elle est anxieuse et veut raconter immédiatement toute son histoire aux policiers. Tu dois l'assister et l'aider à comprendre la situation. Que fais-tu en premier ?",
+      "image": "img/avocat-garde-a-vue.jpg",
+      "image_alt": "Un avocat s'entretient avec une jeune femme en garde à vue dans un commissariat sobre.",
+      "choix": [
+        {
+          "id": "c1",
+          "label": "M'entretenir confidentiellement avec Inès",
+          "traits": {
+            "aider": 2,
+            "proteger": 2
+          },
+          "gravite": 0,
+          "consequence": "Inès peut expliquer sa version sans être jugée et tu vérifies qu'elle comprend ses droits. Tu disposes de premières informations utiles, mais tu n'as pas encore confronté son récit aux preuves.",
+          "suite": "e2"
+        },
+        {
+          "id": "c2",
+          "label": "Étudier d'abord les éléments accessibles du dossier",
+          "traits": {
+            "analyser": 2,
+            "enqueter": 1
+          },
+          "gravite": 0,
+          "consequence": "Tu demandes à prendre connaissance des éléments accessibles dans le cadre de la garde à vue. Tu peux repérer rapidement ce qui est reproché à Inès, mais tu risques de passer à côté de son état émotionnel et de détails importants si tu repousses l'entretien.",
+          "suite": "e2"
+        },
+        {
+          "id": "c3",
+          "label": "La laisser raconter directement aux enquêteurs",
+          "traits": {
+            "convaincre": 1
+          },
+          "gravite": 2,
+          "consequence": "Tu penses qu'une explication spontanée pourrait clarifier la situation. Mais sans entretien préalable ni vérification de sa compréhension des enjeux, Inès risque de s'exprimer maladroitement ou de concéder des faits qu'elle conteste.",
+          "suite": "e2"
+        }
+      ]
+    },
+    "e2": {
+      "texte": "Lors de votre entretien, Inès explique qu'elle s'est disputée avec Yanis au sujet d'un sac. Elle affirme avoir voulu récupérer ses affaires, mais ne sait plus précisément dans quel ordre les gestes se sont produits. Elle te demande de lui promettre qu'elle sera libérée. Comment réagis-tu ?",
+      "image": "img/avocat-client.jpg",
+      "image_alt": "Un avocat écoute attentivement sa cliente pendant un entretien confidentiel dans un bureau.",
+      "choix": [
+        {
+          "id": "c4",
+          "label": "Reconstituer les faits sans lui souffler de réponse",
+          "traits": {
+            "enqueter": 2,
+            "aider": 1
+          },
+          "gravite": 0,
+          "consequence": "Tu poses des questions ouvertes, distingues ce dont Inès se souvient de ce qu'elle suppose et notes les points incertains. L'entretien est plus long et certaines zones d'ombre demeurent, mais son récit reste le sien.",
+          "suite": "e3"
+        },
+        {
+          "id": "c5",
+          "label": "Construire tout de suite une défense autour de sa version",
+          "traits": {
+            "convaincre": 2,
+            "proteger": 1
+          },
+          "gravite": 1,
+          "consequence": "Tu obtiens rapidement une ligne de défense cohérente à partir de ses déclarations. Cependant, si tu ne distingues pas assez tôt les souvenirs certains des suppositions, une contradiction découverte plus tard fragilisera ta stratégie.",
+          "suite": "e3"
+        },
+        {
+          "id": "c6",
+          "label": "Lui promettre une libération rapide",
+          "traits": {},
+          "gravite": 2,
+          "consequence": "Inès se calme sur le moment, mais tu lui donnes une assurance que tu ne peux pas garantir. Si la procédure se poursuit, sa confiance en toi risque d'être sérieusement entamée.",
+          "suite": "e3"
+        }
+      ]
+    },
+    "e3": {
+      "texte": "Tu étudies les éléments accessibles du dossier pénal. Le témoignage de Yanis est précis sur la dispute, mais moins clair sur l'identité de la personne qui a pris le téléphone. La vidéo confirme une altercation sans montrer nettement le geste contesté. Un horaire mentionné dans un compte rendu semble aussi différer de celui indiqué dans un autre document. Que fais-tu ?",
+      "image": "img/avocat-dossier.jpg",
+      "image_alt": "Un avocat examine un dossier pénal, des notes et des documents devant un écran affichant une chronologie.",
+      "choix": [
+        {
+          "id": "c7",
+          "label": "Comparer les déclarations, la vidéo et les horaires",
+          "traits": {
+            "analyser": 2,
+            "enqueter": 2
+          },
+          "gravite": 0,
+          "consequence": "Tu établis une chronologie provisoire et identifies les contradictions qui méritent une explication. Cette analyse prend du temps et ne prouve pas qu'Inès est innocente, mais elle permet de cibler les questions utiles.",
+          "suite": "e4"
+        },
+        {
+          "id": "c8",
+          "label": "Demander des vérifications et actes complémentaires",
+          "traits": {
+            "enqueter": 2,
+            "proteger": 1
+          },
+          "gravite": 0,
+          "consequence": "Tu prépares des demandes motivées visant notamment à clarifier la chronologie et à obtenir les éléments pertinents qui ne figurent pas encore au dossier. Ces démarches peuvent prendre du temps et leur réalisation dépend du cadre procédural et de la décision des autorités compétentes.",
+          "suite": "e5"
+        },
+        {
+          "id": "c9",
+          "label": "Écarter les éléments qui contredisent Inès",
+          "traits": {},
+          "gravite": 3,
+          "consequence": "Tu choisis de ne pas examiner les éléments défavorables à ta cliente. Tu risques de découvrir trop tard une contradiction majeure et de perdre toute crédibilité si tu avances ensuite une version incompatible avec le dossier.",
+          "suite": "e4"
+        }
+      ]
+    },
+    "e4": {
+      "texte": "Tu prépares l'audition de Yanis. Il est convaincu qu'Inès l'a frappé, mais sa première déclaration ne mentionne pas clairement le vol du téléphone. Il a aussi indiqué un horaire légèrement différent de celui du compte rendu. Tu dois le questionner avec fermeté sans transformer l'audition en attaque personnelle. Quelle approche choisis-tu ?",
+      "image": "img/avocat-temoin.jpg",
+      "image_alt": "Un avocat prépare des questions en consultant les déclarations d'un témoin dans une salle d'audience.",
+      "choix": [
+        {
+          "id": "c10",
+          "label": "Poser des questions précises sur les contradictions",
+          "traits": {
+            "analyser": 1,
+            "convaincre": 2
+          },
+          "gravite": 0,
+          "consequence": "Tu demandes à Yanis de préciser les distances, les conditions d'observation, la chronologie et les raisons des différences entre ses déclarations. Tu peux faire émerger des incertitudes utiles, mais un témoignage imprécis ne signifie pas automatiquement qu'il ment.",
+          "suite": "e5"
+        },
+        {
+          "id": "c11",
+          "label": "Privilégier un échange calme sur ses souvenirs",
+          "traits": {
+            "aider": 1,
+            "enqueter": 2
+          },
+          "gravite": 0,
+          "consequence": "Tu privilégies des questions ouvertes et un ton mesuré pour mieux comprendre ce que Yanis a réellement observé. L'échange est moins agressif, mais certaines contradictions risquent de rester moins nettement mises en évidence si tu ne les reprends pas ensuite.",
+          "suite": "e5"
+        },
+        {
+          "id": "c12",
+          "label": "L'accuser de mentir pour le déstabiliser",
+          "traits": {
+            "convaincre": 1
+          },
+          "gravite": 2,
+          "consequence": "Ta confrontation attire l'attention sur les incohérences, mais elle braque le témoin et nuit à la qualité des réponses. Le tribunal peut percevoir ton approche comme une attaque sans fondement plutôt que comme une véritable démonstration.",
+          "suite": "e5"
+        }
+      ]
+    },
+    "e5": {
+      "texte": "Dans le couloir du tribunal, le représentant du parquet te propose un échange sur une éventuelle issue moins lourde si Inès reconnaît certains faits. Tu sais qu'elle conteste toujours le geste violent et le vol. Tu dois défendre ses intérêts tout en respectant sa volonté et la réalité du dossier. Comment réagis-tu ?",
+      "image": "img/avocat-couloir.jpg",
+      "image_alt": "Un avocat et un représentant du parquet discutent discrètement dans le couloir d'un tribunal.",
+      "choix": [
+        {
+          "id": "c13",
+          "label": "Examiner les options et expliquer leurs conséquences à Inès",
+          "traits": {
+            "convaincre": 2,
+            "proteger": 1
+          },
+          "gravite": 0,
+          "consequence": "Tu clarifies les options réellement envisageables, leurs incertitudes et les conséquences possibles, puis recueilles la décision éclairée de ta cliente. La discussion peut prendre du temps et ne garantit aucun accord, mais Inès garde la maîtrise de ses choix.",
+          "suite": "e6"
+        },
+        {
+          "id": "c14",
+          "label": "Refuser toute discussion et préparer le débat",
+          "traits": {
+            "proteger": 2,
+            "analyser": 1
+          },
+          "gravite": 1,
+          "consequence": "Tu évites qu'une négociation détourne l'attention des contestations du dossier et concentres tes efforts sur l'audience. Tu peux toutefois laisser passer une possibilité procédurale utile, même si aucune issue négociée n'aurait été garantie.",
+          "suite": "e6"
+        },
+        {
+          "id": "c15",
+          "label": "Accepter un compromis sans consulter Inès",
+          "traits": {},
+          "gravite": 3,
+          "consequence": "Tu t'engages sur une orientation importante sans recueillir la volonté de ta cliente. Tu portes atteinte à la confiance et à son autonomie, et tu risques de compromettre sa défense sans même obtenir les garanties espérées.",
+          "suite": "e6"
+        }
+      ]
+    },
+    "e6": {
+      "texte": "À l'audience, tu peux interroger Yanis sur les limites de son témoignage et discuter la portée de la vidéo. Une note versée au dossier mentionne également une possible irrégularité dans le déroulement d'un acte, mais tu n'as pas encore assez d'éléments pour en mesurer les conséquences. Tu prépares ta plaidoirie. Quelle stratégie adoptes-tu ?",
+      "image": "img/avocat-plaidoirie.jpg",
+      "image_alt": "Un avocat prépare sa plaidoirie devant une salle d'audience, avec le dossier pénal ouvert sur son pupitre.",
+      "choix": [
+        {
+          "id": "c16",
+          "label": "Présenter les incertitudes et vérifier l'irrégularité",
+          "traits": {
+            "analyser": 2,
+            "proteger": 2
+          },
+          "gravite": 0,
+          "consequence": "Tu construis une argumentation fondée sur les éléments vérifiables, distingues les faits établis des hypothèses et examines si l'irrégularité justifie une demande procédurale. Ta plaidoirie est plus nuancée, mais elle reste crédible et respecte la présomption d'innocence.",
+          "suite": "e7"
+        },
+        {
+          "id": "c17",
+          "label": "Concentrer la plaidoirie sur les faiblesses de la preuve",
+          "traits": {
+            "convaincre": 2,
+            "analyser": 1
+          },
+          "gravite": 0,
+          "consequence": "Tu mets en avant les limites de la vidéo, les incertitudes sur le téléphone et les différences entre les déclarations. Cette approche est claire et ciblée, mais elle peut laisser de côté une irrégularité qui aurait mérité un examen approfondi.",
+          "suite": "e7"
+        },
+        {
+          "id": "c18",
+          "label": "Inventer un alibi pour renforcer la défense",
+          "traits": {},
+          "gravite": 3,
+          "consequence": "Tu présentes sciemment une version inventée comme un fait réel. Tu trahis tes obligations professionnelles, détruis la confiance de ta cliente et risques de discréditer toute la défense, voire de déclencher des conséquences disciplinaires ou judiciaires selon les faits.",
+          "suite": "e7"
+        }
+      ]
+    },
+    "e7": {
+      "texte": "Tu termines la préparation de la défense. Inès te confie qu'elle a supprimé un message envoyé à une amie après la dispute, parce qu'elle avait honte de son comportement. Tu ne sais pas encore si ce message est pertinent. Tu dois décider comment gérer cette information et présenter ton dossier sans trahir le secret professionnel. Que fais-tu ?",
+      "image": "img/avocat-plaidoirie.jpg",
+      "image_alt": "Un avocat relit ses notes dans une salle d'audience vide avant de défendre sa cliente.",
+      "choix": [
+        {
+          "id": "c19",
+          "label": "Évaluer la pertinence et conseiller Inès honnêtement",
+          "traits": {
+            "aider": 2,
+            "proteger": 2
+          },
+          "gravite": 0,
+          "consequence": "Tu expliques à Inès les risques d'une dissimulation et les limites de ce que tu peux lui conseiller, puis tu examines les options licites avec elle. Tu préserves la confidentialité de vos échanges sans promettre que le message sera sans conséquence.",
+          "suite": null
+        },
+        {
+          "id": "c20",
+          "label": "Préparer une défense limitée aux faits vérifiables",
+          "traits": {
+            "analyser": 2,
+            "convaincre": 1
+          },
+          "gravite": 1,
+          "consequence": "Tu concentres la défense sur les éléments régulièrement versés au dossier et évites d'affirmer quoi que ce soit sur le message que tu ne connais pas. Cette prudence limite les risques d'erreur, mais tu dois tout de même conseiller ta cliente sur la portée possible de cette information.",
+          "suite": null
+        },
+        {
+          "id": "c21",
+          "label": "Détruire d'autres traces et cacher leur existence",
+          "traits": {},
+          "gravite": 3,
+          "consequence": "Tu encourages la destruction ou la dissimulation d'éléments potentiellement pertinents. Tu franchis une limite déontologique majeure et exposes ta cliente ainsi que toi-même à des conséquences graves, tout en fragilisant profondément la défense.",
+          "suite": null
+        }
+      ]
+    }
+  },
+  "fins": [
+    {
+      "gravite_max": 2,
+      "titre": "Une défense rigoureuse",
+      "texte": "Tu as protégé les droits d'Inès, examiné les preuves à charge et à décharge et distingué les faits établis des incertitudes. Tu as préparé une défense honnête, respecté la confidentialité et évité de promettre un résultat. Le tribunal reste seul décisionnaire : ton travail ne garantit pas l'issue, mais il donne à ta cliente une défense sérieuse."
+    },
+    {
+      "gravite_max": 6,
+      "titre": "Une défense sous tension",
+      "texte": "Tu as défendu Inès, mais certaines décisions ont limité la qualité de ton enquête ou compliqué la relation avec ta cliente. Tu as encore pu construire une argumentation utile, à condition de revenir aux faits vérifiables et de corriger les choix fragiles. Cette affaire montre que défendre quelqu'un implique des arbitrages et une grande discipline."
+    },
+    {
+      "gravite_max": 99,
+      "titre": "Une défense compromise",
+      "texte": "Des décisions graves ont affaibli la défense ou franchi des limites incompatibles avec les devoirs de l'avocat. La confiance de ta cliente et ta crédibilité sont en danger, et certains comportements peuvent entraîner des suites disciplinaires ou judiciaires. Une défense efficace ne justifie jamais de mentir, de fabriquer des preuves ou d'entraver la justice."
+    }
+  ]
+}

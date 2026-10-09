@@ -13,6 +13,64 @@ TRAITS = ("analyser", "convaincre", "enqueter", "aider", "proteger")
 
 _LONGUEUR_MAX_ID = 200
 
+_MACHINES_INITIALES = 1
+_MACHINES_MAX = 50
+_CONFIANCE_INITIALE = 80
+_CONFIANCE_GAIN_PAR_POINT = 5
+_CONFIANCE_PERTE_PAR_GRAVITE = 10
+_CONFIANCE_MIN = 0
+_CONFIANCE_MAX = 100
+_TEMPS_BUDGET_MINUTES = 120
+_TEMPS_COUT_PAR_COUP = 15
+
+
+def tableau_de_bord(affaire: dict, etat: dict) -> dict:
+    """Calcule le tableau de bord de la salle de crise (fonction pure, sans IA).
+
+    Formule déterministe (état -> valeurs) :
+    - ``machines_infectees`` = min(1 + gravité, 50) (1 au départ, borné à 50).
+    - ``confiance_direction`` = 80 + 5 × (convaincre + aider) − 10 × gravité,
+      borné entre 0 et 100 (80 au départ).
+    - ``temps_restant`` = max(0, 120 − 15 × nb_coups) en minutes (budget fictif,
+      distinct du chronomètre temps réel).
+
+    Args:
+        affaire: Dictionnaire de l'affaire (ignoré, conservé pour la signature).
+        etat: État de la partie (``gravite``, ``scores``, ``historique``).
+
+    Returns:
+        Un dictionnaire ``{"machines_infectees", "confiance_direction",
+        "temps_restant"}`` aux valeurs entières bornées.
+    """
+    _ = affaire
+    if not isinstance(etat, dict):
+        etat = {}
+    gravite = etat.get("gravite", 0)
+    if isinstance(gravite, bool) or not isinstance(gravite, int) or gravite < 0:
+        gravite = 0
+    scores = etat.get("scores", {})
+    if not isinstance(scores, dict):
+        scores = {}
+    convaincre = scores.get("convaincre", 0)
+    aider = scores.get("aider", 0)
+    if isinstance(convaincre, bool) or not isinstance(convaincre, int):
+        convaincre = 0
+    if isinstance(aider, bool) or not isinstance(aider, int):
+        aider = 0
+    historique = etat.get("historique", [])
+    nb_coups = len(historique) if isinstance(historique, list) else 0
+    machines = min(_MACHINES_INITIALES + gravite, _MACHINES_MAX)
+    confiance = _CONFIANCE_INITIALE
+    confiance += _CONFIANCE_GAIN_PAR_POINT * (convaincre + aider)
+    confiance -= _CONFIANCE_PERTE_PAR_GRAVITE * gravite
+    confiance = max(_CONFIANCE_MIN, min(_CONFIANCE_MAX, confiance))
+    temps = max(0, _TEMPS_BUDGET_MINUTES - _TEMPS_COUT_PAR_COUP * nb_coups)
+    return {
+        "machines_infectees": machines,
+        "confiance_direction": confiance,
+        "temps_restant": temps,
+    }
+
 
 def nouvelle_partie(affaire: dict) -> dict:
     """Crée l'état initial d'une partie pour une affaire donnée.

@@ -1,0 +1,59 @@
+{
+  "cyber": {
+    "titre": "Expert cyber",
+    "quotidien": [
+      "Surveiller les alertes et isoler les machines compromises pour contenir les attaques",
+      "Analyser les journaux et remonter jusqu'à l'origine de l'intrusion",
+      "Aider les équipes à repartir sur des bases saines et expliquer les mesures de protection"
+    ],
+    "qualites": [
+      "Rigueur et méthode",
+      "Curiosité et goût de l'enquête",
+      "Calme face à l'urgence"
+    ],
+    "formations": [
+      "BUT informatique ou BTS CIEL",
+      "Licence puis master en cybersécurité",
+      "École d'ingénieur en sécurité des systèmes"
+    ],
+    "jouable": true
+  },
+  "avocat": {
+    "titre": "Avocat",
+    "quotidien": [
+      "Écouter les clients et analyser leur dossier pour construire une défense solide",
+      "Plaider et convaincre au tribunal ou dans les négociations",
+      "Rédiger des actes et suivre l'évolution des lois et de la jurisprudence"
+    ],
+    "qualites": [
+      "Art de convaincre",
+      "Sens de l'écoute et de l'analyse",
+      "Ténacité dans la défense des dossiers"
+    ],
+    "formations": [
+      "Licence puis master en droit",
+      "Examen d'entrée dans une école d'avocats",
+      "Certificat d'aptitude à la profession d'avocat"
+    ],
+    "jouable": false
+  },
+  "medecin": {
+    "titre": "Médecin",
+    "quotidien": [
+      "Examiner les patients et poser un diagnostic à partir des symptômes et des analyses",
+      "Soigner et suivre les traitements en expliquant chaque étape aux patients",
+      "Travailler en équipe avec les soignants pour protéger les plus fragiles"
+    ],
+    "qualites": [
+      "Empathie et sens de l'aide",
+      "Rigueur scientifique",
+      "Endurance face aux urgences"
+    ],
+    "formations": [
+      "Parcours d'accès aux études de santé puis études de médecine",
+      "Internat pour se spécialiser",
+      "Formation continue tout au long de la carrière"
+    ],
+    "jouable": false
+  }
+}

@@ -6,9 +6,14 @@ vérifier sa cohérence structurelle. Toute erreur est signalée par une
 """
 
 import json
+import re
 from pathlib import Path
 
 TRAITS_AUTORISES = frozenset({"analyser", "convaincre", "enqueter", "aider", "proteger"})
+
+MOTIF_IMAGE = re.compile(r"^img/[a-z0-9\-_/]+\.(png|jpg|jpeg|webp|svg)$")
+LONGUEUR_MAX_IMAGE = 200
+MOTIF_THEME = re.compile(r"^[a-z0-9-]+$")
 
 CLES_OBLIGATOIRES = ("id", "metier", "titre", "contexte", "debut", "etapes", "fins")
 
@@ -89,6 +94,8 @@ def _valider_structure(affaire: object) -> None:
         if not _est_texte_non_vide(affaire[cle]):
             raise ValueError(f"La clé « {cle} » doit être une chaîne non vide.")
 
+    _valider_theme(affaire.get("theme"))
+
     etapes = affaire["etapes"]
     if not isinstance(etapes, dict) or not etapes:
         raise ValueError("La clé « etapes » doit être un objet JSON non vide.")
@@ -107,6 +114,27 @@ def _valider_structure(affaire: object) -> None:
         _valider_fin(fin)
 
 
+def _valider_theme(theme: object) -> None:
+    """Valide le champ optionnel ``theme`` d'une affaire.
+
+    Une affaire sans ``theme`` reste valide (optionnel non durci). Si
+    ``theme`` est présent, il doit être une chaîne non vide en minuscules,
+    chiffres et tirets uniquement (ex. « cyber »), utilisée pour habiller
+    la partie et le bilan.
+    """
+    if theme is None:
+        return
+    if (
+        not isinstance(theme, str)
+        or not theme.strip()
+        or not MOTIF_THEME.match(theme)
+    ):
+        raise ValueError(
+            "La clé « theme » doit être une chaîne non vide en minuscules, "
+            "chiffres et tirets uniquement (ex. « cyber »)."
+        )
+
+
 def _valider_etape(identifiant: str, etape: object, etapes: dict) -> None:
     if not isinstance(etape, dict):
         raise ValueError(f"L'étape « {identifiant} » doit être un objet JSON.")
@@ -120,6 +148,45 @@ def _valider_etape(identifiant: str, etape: object, etapes: dict) -> None:
 
     for choix in choix_liste:
         _valider_choix(identifiant, choix, etapes)
+
+    _valider_image(identifiant, etape)
+
+
+def _valider_image(identifiant: str, etape: dict) -> None:
+    """Valide les champs optionnels ``image`` / ``image_alt`` d'une étape.
+
+    Une étape sans ``image`` reste valide (optionnel non durci). Si ``image``
+    est présente, elle doit être un chemin relatif sous ``img/`` (minuscules,
+    chiffres, tirets, extensions autorisées, 200 caractères maximum, sans
+    ``..`` ni URL) et ``image_alt`` doit être un texte alternatif non vide.
+    """
+    image = etape.get("image")
+    alt = etape.get("image_alt")
+    if image is None:
+        if alt is not None:
+            raise ValueError(
+                f"L'étape « {identifiant} » a un « image_alt » sans « image »."
+            )
+        return
+    if (
+        not isinstance(image, str)
+        or not image.strip()
+        or len(image) > LONGUEUR_MAX_IMAGE
+        or ".." in image
+        or "\\" in image
+        or image.startswith(("/", "http"))
+        or not MOTIF_IMAGE.match(image)
+    ):
+        raise ValueError(
+            f"L'étape « {identifiant} » a une « image » invalide : chemin relatif "
+            "attendu sous « img/ » (minuscules, chiffres, tirets, extension "
+            "png/jpg/jpeg/webp/svg, 200 caractères maximum, sans « .. » ni URL)."
+        )
+    if not isinstance(alt, str) or not alt.strip():
+        raise ValueError(
+            f"L'étape « {identifiant} » a une « image » sans « image_alt » "
+            "non vide : chaque image doit avoir un texte alternatif."
+        )
 
 
 def _valider_choix(etape_id: str, choix: object, etapes: dict) -> None:

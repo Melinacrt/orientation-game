@@ -39,6 +39,8 @@ RACINE = Path(__file__).resolve().parents[1]
 AFFAIRE_ID = "cyber-alerte-serveur-rh"
 AFFAIRE_JSON = RACINE / "data" / "affaires" / f"{AFFAIRE_ID}.json"
 PROFILS_JSON = RACINE / "data" / "profils.json"
+METIERS_JSON = RACINE / "data" / "metiers.json"
+TITRE_AUTRE_METIER = "Essaie un autre métier"
 
 TRAITS = ("analyser", "convaincre", "enqueter", "aider", "proteger")
 LIBELLES_ACCENTUES = ("Analyser", "Convaincre", "Enquêter", "Aider", "Protéger")
@@ -67,6 +69,11 @@ def charger_affaire_json():
 
 def charger_profils():
     with PROFILS_JSON.open(encoding="utf-8") as fichier:
+        return json.load(fichier)
+
+
+def charger_metiers():
+    with METIERS_JSON.open(encoding="utf-8") as fichier:
         return json.load(fichier)
 
 
@@ -203,8 +210,16 @@ def test_bilan_profil_affiche_avant_scores_et_fin(client):
 
 
 def test_bilan_profil_contient_titre_texte_et_metiers_proches(client):
+    """Rupture volontaire (plan theme-retour-bilan-metiers point 3) :
+    le bilan ne calcule plus les « métiers proches » depuis
+    data/profils.json ; le profil (titre + texte) reste affiché et le bilan
+    montre désormais la fiche métier du métier joué (data-testid=fiche-metier,
+    schéma figé dans tests/test_themes_retour_bilan.py) + le bloc
+    « Essaie un autre métier » (nom conservé pour traçabilité).
+    """
     _affaire, _chemin, bilan = jouer_parcours_complet_prg(client)
     texte = page_texte(bilan)
+    brut = bilan.get_data(as_text=True)
     profils = charger_profils()
 
     correspondances = [p for p in profils if p.get("titre") and p["titre"] in texte]
@@ -213,10 +228,25 @@ def test_bilan_profil_contient_titre_texte_et_metiers_proches(client):
     assert profil.get("texte") and profil["texte"][:40] in texte, (
         "le texte du profil affiché est absent du bilan"
     )
-    noms = [nom_metier(m) for m in liste_metiers(profil) if isinstance(m, dict)]
-    assert noms, "le profil affiché ne liste aucun métier"
-    assert any(nom and nom in texte for nom in noms), (
-        "aucun métier proche du profil affiché dans le bilan"
+    metiers = charger_metiers()
+    fiche = metiers["cyber"]
+    assert 'data-testid="fiche-metier"' in brut or "data-testid='fiche-metier'" in brut, (
+        "la fiche métier (data-testid=fiche-metier) est absente du bilan"
+    )
+    assert fiche["titre"] in texte, "le titre du métier joué est absent de la fiche"
+    for point in fiche["quotidien"]:
+        assert point in texte, f"point du quotidien absent de la fiche : {point[:30]!r}"
+    assert any(q in texte for q in fiche["qualites"]), (
+        "aucune qualité utile de la fiche dans le bilan"
+    )
+    assert any(f in texte for f in fiche["formations"]), (
+        "aucune formation possible de la fiche dans le bilan"
+    )
+    assert TITRE_AUTRE_METIER in texte, (
+        f"bloc {TITRE_AUTRE_METIER!r} absent du bilan"
+    )
+    assert 'data-testid="autre-metier"' in brut or "data-testid='autre-metier'" in brut, (
+        "le bloc autre métier (data-testid=autre-metier) est absent"
     )
 
 

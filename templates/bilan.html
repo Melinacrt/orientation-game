@@ -5,16 +5,6 @@
 <section class="carte carte-profil" data-testid="profil">
   <h2>Ton profil : {{ bilan.profil.titre }}</h2>
   <p>{{ bilan.profil.texte }}</p>
-  <h3>Métiers proches de ton profil</h3>
-  <ul class="metiers-proches">
-    {% for metier in metiers_details %}
-    <li class="metier">
-      <strong>{{ metier.nom }}</strong>
-      {% if metier.jouable %}<span class="badge badge-jouable">Jouable</span>{% else %}<span class="badge badge-bientot">Bientôt</span>{% endif %}
-      {% if metier.lien %}<br><span class="lien-metier">{{ metier.lien }}</span>{% endif %}
-    </li>
-    {% endfor %}
-  </ul>
 </section>
 <hr class="separateur">
 <section class="carte">
@@ -56,6 +46,49 @@
     {% endfor %}
   </ul>
 </section>
+{% if fiche_metier %}
+<hr class="separateur">
+<section class="carte carte-metier" data-testid="fiche-metier">
+  <h2>Fiche métier : {{ fiche_metier.titre }}</h2>
+  <h3>Au quotidien</h3>
+  <ul class="quotidien">
+    {% for point in fiche_metier.quotidien %}
+    <li>{{ point }}</li>
+    {% endfor %}
+  </ul>
+  {% if fiche_metier.qualites %}
+  <h3>Qualités utiles</h3>
+  <ul class="qualites">
+    {% for qualite in fiche_metier.qualites %}
+    <li>{{ qualite }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% if fiche_metier.formations %}
+  <h3>Formations possibles</h3>
+  <ul class="formations">
+    {% for formation in fiche_metier.formations %}
+    <li>{{ formation }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</section>
+{% endif %}
+{% if autres_metiers %}
+<hr class="separateur">
+<section class="carte carte-autres-metiers" data-testid="autre-metier">
+  <h2>Essaie un autre métier</h2>
+  <p class="aide">D'autres affaires arrivent : voici les métiers que tu pourras explorer.</p>
+  <ul class="autres-metiers">
+    {% for metier in autres_metiers %}
+    <li class="metier">
+      <strong>{{ metier.titre }}</strong>
+      {% if metier.jouable %}<span class="badge badge-jouable">Jouable</span>{% else %}<span class="badge badge-bientot">Bientôt</span>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
 <p class="liens">
   <a class="bouton" href="{{ url_for('partie') }}?affaire={{ affaire_id }}">Rejouer l'affaire</a>
   <a href="{{ url_for('accueil') }}">Retour à l'accueil</a>
