@@ -178,12 +178,30 @@ def test_profils_traits_dominants_parmi_les_cinq_traits():
 
 
 def test_profils_metiers_proches_parmi_les_trois_metiers():
+    """Nouveau contrat (plan-bilan étape 1, rupture volontaire tester) : métiers réels.
+
+    Chaque profil liste 3-4 métiers enrichis (dicts : nom réel + phrase de lien
+    + statut jouable) au lieu d'un sous-ensemble de chaînes parmi les trois
+    métiers. Seul « expert cyber » (seule affaire existante) est jouable.
+    """
     profils = charger_profils()
 
     for profil in profils:
-        proches = profil["metiers_proches"]
+        proches = profil.get("metiers", profil.get("metiers_proches"))
         assert isinstance(proches, list)
-        assert set(proches) <= METIERS_AUTORISES
+        assert 3 <= len(proches) <= 4
+        for entree in proches:
+            assert isinstance(entree, dict)
+            nom = entree.get("nom", entree.get("nom_metier", entree.get("titre", "")))
+            lien = entree.get("lien", entree.get("pourquoi", ""))
+            jouable = entree.get("jouable", entree.get("disponible"))
+            assert isinstance(nom, str) and nom.strip() != ""
+            assert isinstance(lien, str) and lien.strip() != ""
+            assert isinstance(jouable, bool)
+            if nom.strip().lower() == "expert cyber":
+                assert jouable is True, "« expert cyber » (affaire existante) doit être jouable"
+            else:
+                assert jouable is False, f"« {nom} » doit être « Bientôt » (non jouable)"
 
 
 def test_bilan_sur_parcours_type_renvoie_un_profil_existant():

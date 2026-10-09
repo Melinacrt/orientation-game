@@ -135,6 +135,95 @@ fieldset {
   margin: 0.1rem;
 }
 
+.carte-profil {
+  border-left: 4px solid #2f6fed;
+}
+
+.metiers-proches {
+  list-style: none;
+  padding: 0;
+  margin: 0.8rem 0 0;
+}
+
+.metier {
+  padding: 0.6rem 0;
+  border-top: 1px solid #e3e9f2;
+}
+
+.metier:first-child {
+  border-top: none;
+}
+
+.lien-metier {
+  color: #44566c;
+}
+
+.badge {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 0.1rem 0.6rem;
+  margin-left: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.badge-jouable {
+  background: #e0f2e4;
+  color: #1d6b32;
+  border: 1px solid #1d6b32;
+}
+
+.badge-bientot {
+  background: #f0f2f7;
+  color: #5a6b7f;
+  border: 1px solid #5a6b7f;
+}
+
+.barre {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.barre progress {
+  flex: 1 1 8rem;
+  min-width: 6rem;
+  height: 0.9rem;
+}
+
+.barre.dominant {
+  background: #eef4ff;
+  border-radius: 0.5rem;
+  padding: 0.3rem 0.5rem;
+}
+
+.point-fort {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1f54c4;
+}
+
+.valeur {
+  min-width: 2ch;
+  text-align: right;
+}
+
+.gravite-ligne {
+  font-weight: 600;
+}
+
+meter {
+  width: 100%;
+  height: 1.1rem;
+}
+
+hr.separateur {
+  border: none;
+  border-top: 2px solid #d9e1ec;
+  margin: 1.6rem 0;
+}
+
 .message-erreur {
   font-weight: 600;
   color: #8f1d1d;

@@ -2,22 +2,52 @@
 {% block titre %}Bilan — Orientation Game{% endblock %}
 {% block contenu %}
 <h1>Bilan de ton affaire</h1>
+<section class="carte carte-profil" data-testid="profil">
+  <h2>Ton profil : {{ bilan.profil.titre }}</h2>
+  <p>{{ bilan.profil.texte }}</p>
+  <h3>Métiers proches de ton profil</h3>
+  <ul class="metiers-proches">
+    {% for metier in metiers_details %}
+    <li class="metier">
+      <strong>{{ metier.nom }}</strong>
+      {% if metier.jouable %}<span class="badge badge-jouable">Jouable</span>{% else %}<span class="badge badge-bientot">Bientôt</span>{% endif %}
+      {% if metier.lien %}<br><span class="lien-metier">{{ metier.lien }}</span>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+<hr class="separateur">
+<section class="carte">
+  <h2>Tes scores par trait</h2>
+  <p class="aide">Tes scores montrent ce que tu as aimé faire pendant l'affaire. Tes deux points forts sont mis en évidence.</p>
+  {% set echelle = score_max if score_max > 0 else 1 %}
+  <ul class="scores">
+    {% for trait in traits %}
+    {% set libelle = libelles[trait] %}
+    {% set valeur = bilan.scores[trait] %}
+    {% if trait in traits_dominants %}
+    <li class="barre dominant" data-trait="{{ trait }}" data-dominant="true">
+    {% else %}
+    <li class="barre" data-trait="{{ trait }}">
+    {% endif %}
+      <span class="trait">{{ libelle }}</span>
+      <progress max="{{ echelle }}" value="{{ valeur }}" data-trait="{{ trait }}" aria-valuenow="{{ valeur }}" aria-valuemin="0" aria-valuemax="{{ echelle }}" aria-label="{{ libelle }}"></progress>
+      <strong class="valeur">{{ valeur }}</strong>
+      {% if trait in traits_dominants %}<span class="point-fort">Point fort</span>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+<hr class="separateur">
 <section class="carte">
   <h2>Fin : {{ bilan.fin.titre }}</h2>
   {% if bilan.fin.texte %}
   <p>{{ bilan.fin.texte }}</p>
   {% endif %}
-  <p>Gravité finale : {{ bilan.gravite }}</p>
+  <p class="gravite-ligne">Gravité de l'incident : <strong>{{ niveau_gravite }}</strong> ({{ bilan.gravite }} / {{ gravite_max }})</p>
+  <meter min="0" max="{{ gravite_max }}" value="{{ bilan.gravite }}" data-gravite="{{ bilan.gravite }}" aria-valuenow="{{ bilan.gravite }}" aria-valuemin="0" aria-valuemax="{{ gravite_max }}" role="meter" aria-label="Gravité : {{ niveau_gravite }}"></meter>
 </section>
-<section class="carte">
-  <h2>Scores par trait</h2>
-  <p class="aide">Tes scores montrent ce que tu as aimé faire pendant l'affaire.</p>
-  <ul class="scores">
-    {% for trait in traits %}
-    <li><span class="trait">{{ trait }}</span> : <strong>{{ bilan.scores[trait] }}</strong></li>
-    {% endfor %}
-  </ul>
-</section>
+<hr class="separateur">
 <section class="carte">
   <h2>Tes choix cités</h2>
   <ul>
@@ -25,13 +55,6 @@
     <li>{{ citation }}</li>
     {% endfor %}
   </ul>
-</section>
-<section class="carte">
-  <h2>Ton profil : {{ bilan.profil.titre }}</h2>
-  <p>{{ bilan.profil.texte }}</p>
-  <p>Métiers proches :
-    {% for metier in bilan.metiers_proches %}<span class="etiquette">{{ metier }}</span>{% endfor %}
-  </p>
 </section>
 <p class="liens">
   <a class="bouton" href="{{ url_for('partie') }}?affaire={{ affaire_id }}">Rejouer l'affaire</a>

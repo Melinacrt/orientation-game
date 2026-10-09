@@ -109,10 +109,12 @@ def demarrer_partie(client, affaire_id=AFFAIRE_ID):
     return reponse
 
 
-def jouer_coup(client, affaire_id, etape_id, choix_id):
+def jouer_coup(client, affaire_id, etape_id, choix_id, suivre_redirect=True):
+    """Joue un coup en suivant le redirect PRG (POST 303 → page GET)."""
     return client.post(
         "/jouer",
         data={"affaire": affaire_id, "etape": etape_id, "choix": choix_id},
+        follow_redirects=suivre_redirect,
     )
 
 

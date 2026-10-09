@@ -113,15 +113,22 @@ def calculer_bilan(affaire: dict, etat: dict, profils: object) -> dict:
         affaire: Dictionnaire de l'affaire jouée.
         etat: État de la partie (scores, gravité, historique).
         profils: Liste de profils (dicts avec ``traits_dominants``,
-            ``titre``, ``texte`` et ``metiers_proches``), ou chemin
+            ``titre``, ``texte`` et ``metiers_proches`` ou ``metiers``
+            enrichis : noms + phrase de lien + statut jouable), ou chemin
             (``str`` / ``Path``) vers un fichier JSON contenant une telle liste.
 
     Returns:
         Un dictionnaire ``{"scores", "gravite", "fin", "citations",
-        "profil", "metiers_proches"}`` où ``fin`` est la première fin dont
-        ``gravite_max`` couvre la gravité, ``citations`` reprend les labels
-        et conséquences réellement choisis, et ``profil`` est le profil dont
-        les traits dominants scorent le mieux (ex æquo : le premier).
+        "profil", "metiers_proches", "metiers_details",
+        "traits_dominants", "gravite_max", "niveau_gravite"}`` où ``fin``
+        est la première fin dont ``gravite_max`` couvre la gravité,
+        ``citations`` reprend les labels et conséquences réellement
+        choisis, ``profil`` est le profil dont les traits dominants
+        scorent le mieux (ex æquo : le premier), ``metiers_proches``
+        reste la liste des noms (compatibilité), ``metiers_details``
+        porte les phrases de lien et le statut jouable, et
+        ``traits_dominants`` donne le top 2 des traits du joueur
+        (ex æquo : premier rencontré dans l'ordre des traits).
 
     Raises:
         ValueError: Si l'affaire, l'état ou les profils sont invalides.
@@ -151,7 +158,11 @@ def calculer_bilan(affaire: dict, etat: dict, profils: object) -> dict:
         "fin": fin,
         "citations": citations,
         "profil": profil,
-        "metiers_proches": list(profil.get("metiers_proches", [])),
+        "metiers_proches": _noms_metiers(profil),
+        "metiers_details": _details_metiers(profil),
+        "traits_dominants": _top_traits(scores, nombre=2),
+        "gravite_max": _gravite_max(affaire["fins"]),
+        "niveau_gravite": _niveau_gravite(gravite),
     }
 
 
@@ -257,9 +268,25 @@ def _valider_liste_profils(profils: object) -> list:
         for trait in dominants:
             if trait not in TRAITS:
                 raise ValueError(f"Trait dominant inconnu : « {trait} ».")
-        if not isinstance(profil.get("metiers_proches"), list):
+        metiers = profil.get("metiers", profil.get("metiers_proches"))
+        if not isinstance(metiers, list) or not metiers:
             raise ValueError("Chaque profil doit avoir des « metiers_proches ».")
+        for entree in metiers:
+            _valider_entree_metier(entree)
     return list(profils)
+
+
+def _valider_entree_metier(entree: object) -> None:
+    """Valide une entrée métier (chaîne simple ou dict enrichi)."""
+    if isinstance(entree, str):
+        if not entree.strip():
+            raise ValueError("Chaque métier proche doit avoir un nom non vide.")
+        return
+    if not isinstance(entree, dict):
+        raise ValueError("Chaque métier proche doit être un nom ou un objet.")
+    nom = entree.get("nom", entree.get("nom_metier", entree.get("titre", "")))
+    if not isinstance(nom, str) or not nom.strip():
+        raise ValueError("Chaque métier proche doit avoir un nom non vide.")
 
 
 def _choisir_profil(profils: list, scores: dict) -> dict:
@@ -280,3 +307,71 @@ def _score_profil(profil: dict, scores: dict) -> int:
         if isinstance(valeur, int) and not isinstance(valeur, bool):
             total += valeur
     return total
+
+
+def _liste_metiers_brute(profil: dict) -> list:
+    """Renvoie les métiers bruts (clé ``metiers`` ou ``metiers_proches``)."""
+    metiers = profil.get("metiers", profil.get("metiers_proches", []))
+    return list(metiers) if isinstance(metiers, list) else []
+
+
+def _nom_entree_metier(entree: object) -> str:
+    if isinstance(entree, str):
+        return entree
+    if isinstance(entree, dict):
+        nom = entree.get("nom", entree.get("nom_metier", entree.get("titre", "")))
+        return nom if isinstance(nom, str) else ""
+    return ""
+
+
+def _noms_metiers(profil: dict) -> list:
+    """Noms des métiers proches (compatibilité : liste de chaînes)."""
+    return [_nom_entree_metier(entree) for entree in _liste_metiers_brute(profil)]
+
+
+def _details_metiers(profil: dict) -> list:
+    """Détails enrichis : nom + phrase de lien + statut jouable."""
+    details = []
+    for entree in _liste_metiers_brute(profil):
+        nom = _nom_entree_metier(entree)
+        if isinstance(entree, dict):
+            lien = entree.get("lien", entree.get("pourquoi", entree.get("lien_profil", "")))
+            if "jouable" in entree:
+                jouable = entree["jouable"]
+            else:
+                jouable = entree.get("disponible")
+            if not isinstance(jouable, bool):
+                jouable = nom.strip().lower() == "expert cyber"
+            if not isinstance(lien, str):
+                lien = ""
+        else:
+            lien = ""
+            jouable = nom.strip().lower() == "expert cyber"
+        details.append({"nom": nom, "lien": lien, "jouable": jouable})
+    return details
+
+
+def _top_traits(scores: dict, nombre: int = 2) -> list:
+    """Top ``nombre`` traits par score (ex æquo : premier rencontré)."""
+    ranges = sorted(TRAITS, key=lambda trait: (-int(scores.get(trait, 0)), TRAITS.index(trait)))
+    return list(ranges[:nombre])
+
+
+def _gravite_max(fins: list) -> int:
+    valeurs = [
+        fin["gravite_max"]
+        for fin in fins
+        if isinstance(fin, dict)
+        and isinstance(fin.get("gravite_max"), int)
+        and not isinstance(fin.get("gravite_max"), bool)
+    ]
+    return max(valeurs) if valeurs else 0
+
+
+def _niveau_gravite(gravite: int) -> str:
+    """Libellé lisible du niveau de gravité (mêmes seuils que les fins)."""
+    if gravite <= 2:
+        return "Impact maîtrisé"
+    if gravite <= 6:
+        return "Impact limité"
+    return "Impact élevé"

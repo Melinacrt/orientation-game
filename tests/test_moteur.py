@@ -304,4 +304,10 @@ def test_bilan_profil_et_metiers_proches_issus_des_profils_fournis():
         identifiants = {p["id"] for p in PROFILS_EXEMPLE} | {p["titre"] for p in PROFILS_EXEMPLE}
         assert profil in identifiants
     for metier in bilan["metiers_proches"]:
-        assert metier in ("expert cyber", "avocat", "médecin")
+        # Nouveau contrat (plan-bilan étape 1, rupture volontaire tester) : métiers
+        # réels (noms non vides ; dicts enrichis acceptés avec phrase de lien).
+        if isinstance(metier, dict):
+            nom = metier.get("nom", metier.get("titre", ""))
+            assert isinstance(nom, str) and nom.strip() != ""
+        else:
+            assert isinstance(metier, str) and metier.strip() != ""

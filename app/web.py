@@ -15,7 +15,7 @@ import re
 from pathlib import Path
 from typing import Any
 
-from flask import Flask, render_template, request, session
+from flask import Flask, redirect, render_template, request, session, url_for
 
 from app.affaires import charger_affaire
 from app.moteur import TRAITS, calculer_bilan, jouer_coup, nouvelle_partie
@@ -26,6 +26,13 @@ FICHIER_PROFILS = RACINE / "data" / "profils.json"
 LONGUEUR_MAX = 200
 MOTIF_AFFAIRE = re.compile(r"^[a-z0-9-]+$")
 CLE_SECRETE_DEV = "cle-dev-locale-non-secrete-a-changer"
+LIBELLES_TRAITS = {
+    "analyser": "Analyser",
+    "convaincre": "Convaincre",
+    "enqueter": "Enquêter",
+    "aider": "Aider",
+    "proteger": "Protéger",
+}
 
 
 def creer_app() -> Flask:
@@ -46,7 +53,9 @@ def creer_app() -> Flask:
         return render_template("accueil.html")
 
     @application.get("/partie")
-    def partie() -> tuple[str, int]:
+    def partie() -> Any:
+        if "affaire" not in request.args:
+            return _reponse_etape_ou_accueil()
         try:
             affaire_id = _valider_id_affaire(request.args.get("affaire"))
         except ValueError as exc:
@@ -60,8 +69,12 @@ def creer_app() -> Flask:
         session["etat"] = etat
         return _page_partie(affaire, affaire_id, etat, consequence=None), 200
 
+    @application.get("/jouer")
+    def afficher_jouer() -> Any:
+        return _reponse_etape_ou_accueil()
+
     @application.post("/jouer")
-    def jouer() -> tuple[str, int]:
+    def jouer() -> Any:
         try:
             affaire_id = _valider_id_affaire(request.form.get("affaire"))
             etape_id = _exiger_champ(request.form.get("etape"), "etape")
@@ -73,8 +86,7 @@ def creer_app() -> Flask:
             etat = _etat_session(affaire, affaire_id)
             courante = etat.get("etape_courante")
             if courante is None:
-                bilan = calculer_bilan(affaire, etat, FICHIER_PROFILS)
-                return _page_bilan(affaire, affaire_id, etat, bilan), 200
+                return redirect(url_for("bilan"), code=303)
             if etape_id != courante:
                 raise ValueError(
                     "Cette étape ne correspond pas à la partie en cours : "
@@ -86,30 +98,15 @@ def creer_app() -> Flask:
         session["affaire_id"] = affaire_id
         session["etat"] = etat
         if etat.get("etape_courante") is None:
-            try:
-                bilan = calculer_bilan(affaire, etat, FICHIER_PROFILS)
-            except ValueError as exc:
-                return _page_erreur(400, str(exc))
-            return _page_bilan(affaire, affaire_id, etat, bilan), 200
-        consequence = ""
-        if isinstance(etat.get("historique"), list) and etat["historique"]:
-            derniere = etat["historique"][-1]
-            if isinstance(derniere, dict):
-                valeur = derniere.get("consequence", "")
-                if isinstance(valeur, str):
-                    consequence = valeur
-        return _page_partie(affaire, affaire_id, etat, consequence or None), 200
+            return redirect(url_for("bilan"), code=303)
+        return redirect(url_for("afficher_jouer"), code=303)
 
     @application.get("/bilan")
-    def bilan() -> tuple[str, int]:
+    def bilan() -> Any:
         etat_brut = session.get("etat")
         affaire_stockee = session.get("affaire_id")
         if not isinstance(etat_brut, dict) or not isinstance(affaire_stockee, str):
-            return _page_erreur(
-                400,
-                "Aucune partie en cours : demande invalide. "
-                "Retour à l'accueil pour commencer une affaire.",
-            )
+            return redirect(url_for("accueil"))
         try:
             affaire_id = _valider_id_affaire(affaire_stockee)
             affaire = _charger_affaire(affaire_id)
@@ -126,8 +123,21 @@ def creer_app() -> Flask:
 
     @application.errorhandler(404)
     def erreur_404(exc: Any) -> tuple[str, int]:
-        message = _message_erreur(exc, "Page introuvable.")
-        return _page_erreur(404, f"{message} Retour à l'accueil.")
+        _ = exc
+        return _page_erreur(
+            404,
+            "Page introuvable : cette page n'existe pas. "
+            "Retour à l'accueil pour recommencer.",
+        )
+
+    @application.errorhandler(405)
+    def erreur_405(exc: Any) -> tuple[str, int]:
+        _ = exc
+        return _page_erreur(
+            405,
+            "Méthode non autorisée : cette méthode n'est pas autorisée ici. "
+            "Retour à l'accueil pour recommencer.",
+        )
 
     @application.errorhandler(500)
     def erreur_500(exc: Any) -> tuple[str, int]:
@@ -140,6 +150,37 @@ def creer_app() -> Flask:
         )
 
     return application
+
+
+def _consequence_derniere(etat: dict) -> str | None:
+    historique = etat.get("historique")
+    if isinstance(historique, list) and historique:
+        derniere = historique[-1]
+        if isinstance(derniere, dict):
+            valeur = derniere.get("consequence", "")
+            if isinstance(valeur, str) and valeur:
+                return valeur
+    return None
+
+
+def _reponse_etape_ou_accueil() -> Any:
+    etat_brut = session.get("etat")
+    affaire_stockee = session.get("affaire_id")
+    if not isinstance(etat_brut, dict) or not isinstance(affaire_stockee, str):
+        return redirect(url_for("accueil"))
+    try:
+        affaire_id = _valider_id_affaire(affaire_stockee)
+        affaire = _charger_affaire(affaire_id)
+    except ValueError:
+        return redirect(url_for("accueil"))
+    etat = copy.deepcopy(etat_brut)
+    if etat.get("etape_courante") is None:
+        return redirect(url_for("bilan"))
+    courante = etat.get("etape_courante")
+    etapes = affaire.get("etapes", {})
+    if not isinstance(courante, str) or courante not in etapes:
+        return redirect(url_for("accueil"))
+    return _page_partie(affaire, affaire_id, etat, _consequence_derniere(etat)), 200
 
 
 def _page_partie(
@@ -169,7 +210,97 @@ def _page_bilan(affaire: dict, affaire_id: str, etat: dict, bilan: dict) -> str:
         affaire_id=affaire_id,
         bilan=bilan,
         traits=list(TRAITS),
+        libelles=dict(LIBELLES_TRAITS),
+        score_max=_score_max_bilan(bilan),
+        traits_dominants=_dominants_bilan(bilan),
+        metiers_details=_metiers_details_bilan(bilan),
+        niveau_gravite=_niveau_gravite_bilan(bilan),
+        gravite_max=_gravite_max_bilan(bilan),
     )
+
+
+def _scores_bilan(bilan: dict) -> dict:
+    scores = bilan.get("scores")
+    return dict(scores) if isinstance(scores, dict) else {}
+
+
+def _score_max_bilan(bilan: dict) -> int:
+    maximum = 0
+    for trait in TRAITS:
+        valeur = _scores_bilan(bilan).get(trait, 0)
+        if isinstance(valeur, int) and not isinstance(valeur, bool):
+            if valeur > maximum:
+                maximum = valeur
+    return maximum
+
+
+def _dominants_bilan(bilan: dict) -> list:
+    dominants = bilan.get("traits_dominants")
+    if isinstance(dominants, list):
+        choisis = [trait for trait in dominants if trait in TRAITS]
+    else:
+        choisis = []
+    if len(choisis) >= 2:
+        return choisis[:2]
+    scores = _scores_bilan(bilan)
+    ordre = sorted(
+        TRAITS, key=lambda nom: (-_score_nombre(scores, nom), TRAITS.index(nom))
+    )
+    for trait in ordre:
+        if trait not in choisis:
+            choisis.append(trait)
+        if len(choisis) == 2:
+            break
+    return choisis
+
+
+def _score_nombre(scores: dict, trait: str) -> int:
+    valeur = scores.get(trait, 0)
+    if isinstance(valeur, int) and not isinstance(valeur, bool) and valeur > 0:
+        return valeur
+    return 0
+
+
+def _metiers_details_bilan(bilan: dict) -> list:
+    details = bilan.get("metiers_details")
+    if isinstance(details, list) and details:
+        return list(details)
+    proches = bilan.get("metiers_proches")
+    if not isinstance(proches, list):
+        return []
+    normalises = []
+    for entree in proches:
+        if isinstance(entree, dict):
+            nom = str(entree.get("nom", entree.get("titre", "")))
+            lien = str(entree.get("lien", entree.get("pourquoi", "")))
+            jouable = entree.get("jouable", entree.get("disponible"))
+        else:
+            nom, lien, jouable = str(entree), "", None
+        if not isinstance(jouable, bool):
+            jouable = nom.strip().lower() == "expert cyber"
+        normalises.append({"nom": nom, "lien": lien, "jouable": jouable})
+    return normalises
+
+
+def _niveau_gravite_bilan(bilan: dict) -> str:
+    niveau = bilan.get("niveau_gravite")
+    if isinstance(niveau, str) and niveau.strip():
+        return niveau
+    gravite = bilan.get("gravite", 0)
+    if not isinstance(gravite, int) or isinstance(gravite, bool):
+        gravite = 0
+    if gravite <= 2:
+        return "Impact maîtrisé"
+    if gravite <= 6:
+        return "Impact limité"
+    return "Impact élevé"
+
+
+def _gravite_max_bilan(bilan: dict) -> int:
+    maximum = bilan.get("gravite_max")
+    if isinstance(maximum, int) and not isinstance(maximum, bool) and maximum > 0:
+        return maximum
+    return 99
 
 
 def _page_erreur(code: int, message: str) -> tuple[str, int]:
@@ -239,4 +370,4 @@ def _etat_session(affaire: dict, affaire_id: str) -> dict:
 
 
 if __name__ == "__main__":
-    creer_app().run(debug=True)
+    creer_app().run(debug=os.environ.get("FLASK_DEBUG", "0") == "1")
