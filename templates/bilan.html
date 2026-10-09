@@ -37,8 +37,6 @@
   {% if bilan.fin.texte %}
   <p>{{ bilan.fin.texte }}</p>
   {% endif %}
-  <p class="gravite-ligne">Gravité de l'incident : <strong>{{ niveau_gravite }}</strong> ({{ bilan.gravite }} / {{ gravite_max }})</p>
-  <meter min="0" max="{{ gravite_max }}" value="{{ bilan.gravite }}" data-gravite="{{ bilan.gravite }}" aria-valuenow="{{ bilan.gravite }}" aria-valuemin="0" aria-valuemax="{{ gravite_max }}" role="meter" aria-label="Gravité : {{ niveau_gravite }}"></meter>
 </section>
 <hr class="separateur">
 <section class="carte">

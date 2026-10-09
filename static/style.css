@@ -1,16 +1,27 @@
-/* Thème salle de crise : fond sombre, police terminal, accents vert/rouge. */
+/* Orientation Game : styles communs + thèmes neutre, cyber et avocat. */
 
-:root {
-  --fond: #0b0f14;
-  --panneau: #131c28;
-  --panneau-clair: #1a2536;
-  --texte: #d9e6f2;
-  --texte-doux: #93a5bb;
-  --bordure: #2a3a52;
-  --vert: #00e676;
-  --rouge: #ff5252;
-  --info: #4da3ff;
-  --accent: #00e676;
+@font-face {
+  font-family: "Cormorant Garamond";
+  src: url("/static/fonts/CormorantGaramond-VariableFont_wght.ttf") format("truetype");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cormorant Garamond";
+  src: url("/static/fonts/CormorantGaramond-Italic-VariableFont_wght.ttf") format("truetype");
+  font-weight: 300 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pinyon Script";
+  src: url("/static/fonts/PinyonScript-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
 * {
@@ -18,17 +29,16 @@
 }
 
 body {
-  background: #0b0f14;
+  background: var(--fond);
   margin: 0;
-  font-family: "JetBrains Mono", Consolas, "Courier New", monospace;
   line-height: 1.6;
-  color: #d9e6f2;
+  color: var(--texte);
 }
 
 .bandeau {
-  background: #070b11;
-  color: #d9e6f2;
-  border-bottom: 2px solid #00e676;
+  background: var(--fond);
+  color: var(--texte);
+  border-bottom: 2px solid var(--accent);
 }
 
 .navigation {
@@ -41,7 +51,7 @@ body {
 }
 
 .navigation a {
-  color: #00e676;
+  color: var(--accent);
   text-decoration: none;
 }
 
@@ -52,7 +62,7 @@ body {
 .navigation .logo {
   font-weight: 700;
   margin-right: auto;
-  color: #d9e6f2;
+  color: var(--texte);
 }
 
 .contenu {
@@ -64,12 +74,12 @@ body {
 h1 {
   font-size: 1.9rem;
   margin-bottom: 0.5rem;
-  color: #d9e6f2;
+  color: var(--titre);
 }
 
 h2,
 h3 {
-  color: #d9e6f2;
+  color: var(--titre);
 }
 
 .accroche {
@@ -77,11 +87,11 @@ h3 {
   font-weight: 600;
 }
 
-/* Tableau de bord : en haut de chaque étape. */
 .tableau-de-bord {
-  background: #070b11;
-  border: 1px solid #2a3a52;
-  border-top: 3px solid #ff5252;
+  background: var(--fond);
+  color: var(--texte);
+  border: 1px solid var(--bordure);
+  border-top: 3px solid var(--accent);
   border-radius: 0.75rem;
   padding: 1rem 1.2rem;
   margin: 1.2rem 0;
@@ -98,89 +108,79 @@ h3 {
   flex: 1 1 10rem;
   margin: 0;
   padding: 0.6rem 0.8rem;
-  background: #1a2536;
-  border: 1px solid #2a3a52;
+  background: var(--barre-fond);
+  border: 1px solid var(--bordure);
   border-radius: 0.5rem;
+  color: var(--texte);
 }
 
 .indicateur-label {
   display: block;
   font-size: 0.8rem;
-  color: #93a5bb;
+  color: var(--texte);
+  opacity: 0.78;
 }
 
 .indicateur strong {
   font-size: 1.4rem;
 }
 
-.indicateur strong[data-testid="machines-infectees"] {
-  color: #ff5252;
-}
-
-.indicateur strong[data-testid="confiance-direction"] {
-  color: #00e676;
-}
-
-.indicateur strong[data-testid="temps-restant"] {
-  color: #4da3ff;
-}
-
 .chrono {
   margin: 0.8rem 0 0;
   padding: 0.4rem 0.8rem;
   display: inline-block;
-  background: #070b11;
-  border: 1px dashed #ff5252;
+  background: var(--fond);
+  border: 1px dashed var(--accent);
   border-radius: 0.5rem;
-  color: #ff5252;
+  color: var(--accent);
   font-weight: 700;
 }
 
-/* Illustration d'étape : en grand au-dessus du texte. */
 .illustration {
   display: block;
   width: 100%;
   max-height: 22rem;
   object-fit: cover;
-  border: 1px solid #2a3a52;
+  border: 1px solid var(--bordure);
   border-radius: 0.5rem;
   margin-bottom: 1rem;
 }
 
 .carte {
-  background: #131c28;
-  border: 1px solid #2a3a52;
+  background: var(--carte);
+  color: var(--texte);
+  border: 1px solid var(--bordure);
   border-radius: 0.75rem;
   padding: 1.2rem;
   margin: 1.2rem 0;
-  box-shadow: 0 1px 3px rgb(0 0 0 / 0.5);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.35);
 }
 
 .contexte,
 .etape {
-  background: #131c28;
-  border-left: 4px solid #4da3ff;
+  background: var(--carte);
+  border-left: 4px solid var(--accent);
   padding: 0.8rem 1rem;
   border-radius: 0 0.5rem 0.5rem 0;
-  color: #d9e6f2;
+  color: var(--texte);
 }
 
 .consequence {
-  background: #0e2417;
-  border-left: 4px solid #00e676;
+  background: var(--surligne);
+  border-left: 4px solid var(--accent);
   padding: 0.8rem 1rem;
   border-radius: 0 0.5rem 0.5rem 0;
-  color: #d9e6f2;
+  color: var(--surligne-texte);
 }
 
 fieldset {
-  border: 1px solid #2a3a52;
+  border: 1px solid var(--bordure);
   border-radius: 0.5rem;
   padding: 1rem;
 }
 
 legend {
-  color: #00e676;
+  color: var(--accent);
   font-weight: 700;
 }
 
@@ -193,8 +193,8 @@ legend {
 
 .bouton {
   display: inline-block;
-  background: #00e676;
-  color: #070b11;
+  background: var(--accent);
+  color: var(--accent-texte);
   border: none;
   border-radius: 0.5rem;
   padding: 0.65rem 1.2rem;
@@ -206,20 +206,53 @@ legend {
 }
 
 .bouton:hover {
-  background: #00c864;
+  filter: brightness(0.92);
 }
 
 a {
-  color: #00e676;
+  color: var(--accent);
 }
 
 .metiers {
   list-style: none;
   padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.2rem;
+}
+
+.metier-carte {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.carte-image {
+  display: block;
+  width: 100%;
+  height: 11rem;
+  object-fit: cover;
+  border: 1px solid var(--bordure);
+  border-radius: 0.5rem;
+}
+
+.metier-carte .bouton {
+  align-self: flex-start;
+}
+
+.carte-bientot {
+  opacity: 0.6;
+}
+
+.disclaimer {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  margin: 0.4rem 0;
 }
 
 .bientot {
-  color: #93a5bb;
+  color: var(--texte);
+  opacity: 0.78;
   font-style: italic;
 }
 
@@ -238,15 +271,16 @@ a {
 
 .etiquette {
   display: inline-block;
-  background: #1a2536;
-  border: 1px solid #2a3a52;
+  background: var(--barre-fond);
+  border: 1px solid var(--bordure);
   border-radius: 999px;
   padding: 0.15rem 0.7rem;
   margin: 0.1rem;
+  color: var(--texte);
 }
 
 .carte-profil {
-  border-left: 4px solid #00e676;
+  border-left: 4px solid var(--accent);
 }
 
 .metiers-proches {
@@ -257,7 +291,7 @@ a {
 
 .metier {
   padding: 0.6rem 0;
-  border-top: 1px solid #2a3a52;
+  border-top: 1px solid var(--bordure);
 }
 
 .metier:first-child {
@@ -265,7 +299,8 @@ a {
 }
 
 .lien-metier {
-  color: #93a5bb;
+  color: var(--texte);
+  opacity: 0.78;
 }
 
 .badge {
@@ -278,15 +313,15 @@ a {
 }
 
 .badge-jouable {
-  background: #0e2417;
-  color: #00e676;
-  border: 1px solid #00e676;
+  background: var(--surligne);
+  color: var(--surligne-texte);
+  border: 1px solid var(--accent);
 }
 
 .badge-bientot {
-  background: #1a2536;
-  color: #93a5bb;
-  border: 1px solid #93a5bb;
+  background: var(--barre-fond);
+  color: var(--texte);
+  border: 1px solid var(--bordure);
 }
 
 .barre {
@@ -303,7 +338,8 @@ a {
 }
 
 .barre.dominant {
-  background: #0e2417;
+  background: var(--surligne);
+  color: var(--surligne-texte);
   border-radius: 0.5rem;
   padding: 0.3rem 0.5rem;
 }
@@ -311,7 +347,7 @@ a {
 .point-fort {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #00e676;
+  color: var(--accent);
 }
 
 .valeur {
@@ -319,24 +355,15 @@ a {
   text-align: right;
 }
 
-.gravite-ligne {
-  font-weight: 600;
-}
-
-meter {
-  width: 100%;
-  height: 1.1rem;
-}
-
 hr.separateur {
   border: none;
-  border-top: 2px solid #2a3a52;
+  border-top: 2px solid var(--bordure);
   margin: 1.6rem 0;
 }
 
 .message-erreur {
   font-weight: 600;
-  color: #ff5252;
+  color: #b3261e;
 }
 
 .liens {
@@ -345,17 +372,27 @@ hr.separateur {
 
 .pied {
   text-align: center;
-  color: #93a5bb;
+  color: var(--texte);
+  opacity: 0.75;
   font-size: 0.9rem;
   padding: 1.5rem 1rem;
 }
 
 .vert {
-  color: #00e676;
+  color: var(--accent);
 }
 
 .rouge {
-  color: #ff5252;
+  color: #b3261e;
+}
+
+.message-retour {
+  background: var(--surligne);
+  border-left: 4px solid var(--accent);
+  padding: 0.8rem 1rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+  color: var(--surligne-texte);
+  font-weight: 600;
 }
 
 @media (max-width: 36rem) {
@@ -374,101 +411,215 @@ hr.separateur {
   .illustration {
     max-height: 14rem;
   }
+
+  .metiers {
+    grid-template-columns: 1fr;
+  }
 }
 
-/* Thèmes par affaire : la classe theme-<nom> est posée sur <body>.
-   Le style historique (salle de crise sombre) reste le rendu du
-   thème cyber ; le thème neutre (accueil, erreurs) est clair et sobre. */
-
-.theme-cyber {
-  background: #0b0f14;
-  color: #d9e6f2;
-}
-
-.theme-cyber .bandeau {
-  background: #070b11;
-  color: #d9e6f2;
-  border-bottom: 2px solid #00e676;
-}
-
-.theme-cyber .carte {
-  background: #131c28;
-  border: 1px solid #2a3a52;
-}
+/* --- Thème neutre : accueil et pages d'erreur, clair et sobre. --- */
 
 .theme-neutre {
   background: #faf7f0;
   color: #1c2430;
+  font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --fond: #faf7f0;
+  --carte: #ffffff;
+  --texte: #1c2430;
+  --titre: #1c2430;
+  --accent: #1c6e4d;
+  --accent-texte: #ffffff;
+  --bordure: #d8d2c4;
+  --surligne: #eaf3ec;
+  --surligne-texte: #1c2430;
+  --barre: #1c6e4d;
+  --barre-fond: #e5ddcd;
 }
 
 .theme-neutre .bandeau {
   background: #ffffff;
   color: #1c2430;
-  border-bottom: 2px solid #1c6e4d;
+  border-bottom-color: #1c6e4d;
 }
 
-.theme-neutre .navigation a {
-  color: #1c6e4d;
+.theme-neutre .tableau-de-bord {
+  background: var(--carte);
 }
 
-.theme-neutre .navigation .logo {
-  color: #1c2430;
-}
-
-.theme-neutre h1,
-.theme-neutre h2,
-.theme-neutre h3 {
-  color: #1c2430;
-}
-
-.theme-neutre .carte,
-.theme-neutre .contexte,
-.theme-neutre .etape,
-.theme-neutre .tableau-de-bord,
-.theme-neutre .indicateur {
-  background: #ffffff;
-  color: #1c2430;
-  border-color: #d8d2c4;
-}
-
-.theme-neutre .accroche,
-.theme-neutre .consequence {
-  color: #1c2430;
-}
-
-.theme-neutre a {
-  color: #1c6e4d;
-}
-
-.theme-neutre .pied,
-.theme-neutre .bientot,
-.theme-neutre .lien-metier {
+.theme-neutre .pied {
   color: #4d5a6a;
+  opacity: 1;
 }
+
+/* --- Thème cyber : rendu sombre historique (salle de crise). --- */
+
+.theme-cyber {
+  background: #0b0f14;
+  color: #d9e6f2;
+  font-family: "JetBrains Mono", Consolas, "Courier New", monospace;
+  --fond: #0b0f14;
+  --carte: #131c28;
+  --texte: #d9e6f2;
+  --titre: #d9e6f2;
+  --accent: #00e676;
+  --accent-texte: #070b11;
+  --bordure: #2a3a52;
+  --surligne: #0e2417;
+  --surligne-texte: #d9e6f2;
+  --barre: #00e676;
+  --barre-fond: #1a2536;
+}
+
+.theme-cyber .bandeau {
+  background: #070b11;
+  color: #d9e6f2;
+  border-bottom-color: #00e676;
+}
+
+.theme-cyber .tableau-de-bord {
+  background: #070b11;
+  border-color: #2a3a52;
+  border-top-color: #ff5252;
+}
+
+.theme-cyber .indicateur strong[data-testid="machines-infectees"] {
+  color: #ff5252;
+}
+
+.theme-cyber .indicateur strong[data-testid="confiance-direction"] {
+  color: #00e676;
+}
+
+.theme-cyber .indicateur strong[data-testid="temps-restant"] {
+  color: #4da3ff;
+}
+
+.theme-cyber .chrono {
+  background: #070b11;
+  border-color: #ff5252;
+  color: #ff5252;
+}
+
+.theme-cyber .contexte,
+.theme-cyber .etape {
+  border-left-color: #4da3ff;
+}
+
+.theme-cyber .badge-jouable {
+  color: #00e676;
+}
+
+.theme-cyber .badge-bientot {
+  color: #93a5bb;
+  border-color: #93a5bb;
+}
+
+.theme-cyber .bouton:hover {
+  background: #00c864;
+  filter: none;
+}
+
+.theme-cyber .rouge,
+.theme-cyber .message-erreur {
+  color: #ff5252;
+}
+
+/* --- Thème avocat : boiserie sombre, parchemin crème et or. --- */
 
 .theme-avocat {
-  background: #f3ede2;
-  color: #5c1a1b;
-  font-family: Georgia, "Times New Roman", serif;
-  border-top: 4px solid #b08d3e;
+  background: repeating-linear-gradient(90deg, #3a2a1e 0 14px, #33241a 14px 28px);
+  color: #f7f0dd;
+  font-family: "Cormorant Garamond", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  --fond: #3a2a1e;
+  --carte: #f7f0dd;
+  --texte: #2a1c10;
+  --titre: #6d1f2a;
+  --accent: #6d1f2a;
+  --accent-texte: #f7f0dd;
+  --bordure: #b08d3e;
+  --surligne: #f0e2b6;
+  --surligne-texte: #6d1f2a;
+  --barre: #6d1f2a;
+  --barre-fond: #e8dcc0;
 }
 
 .theme-avocat .bandeau {
   background: #2a2118;
-  color: #f3ede2;
-  border-bottom: 2px solid #b08d3e;
+  color: #f7f0dd;
+  border-bottom-color: var(--bordure);
+}
+
+.theme-avocat .navigation a {
+  color: #f0e2b6;
+}
+
+.theme-avocat .navigation .logo {
+  color: #f7f0dd;
+}
+
+.theme-avocat h1 {
+  color: #f0e2b6;
+}
+
+.theme-avocat h1,
+.theme-avocat h2 {
+  font-family: "Pinyon Script", "Segoe Script", "Lucida Handwriting", "Brush Script MT", cursive;
 }
 
 .theme-avocat .carte {
-  background: #fffdf7;
-  border: 1px solid #c9bfa8;
+  border: 3px double var(--bordure);
 }
 
-.message-retour {
-  background: #fff8e1;
-  border-left: 4px solid #b08d3e;
-  padding: 0.8rem 1rem;
-  border-radius: 0 0.5rem 0.5rem 0;
-  color: #1c2430;
-  font-weight: 600;
+.theme-avocat .tableau-de-bord {
+  background: var(--carte);
+  border: 2px double var(--bordure);
+}
+
+.theme-avocat .indicateur {
+  background: #efe6cf;
+  border: 1px solid var(--bordure);
+}
+
+.theme-avocat .chrono {
+  background: var(--surligne);
+  border: 1px dashed var(--accent);
+  color: var(--titre);
+}
+
+.theme-avocat .point-fort {
+  background: var(--surligne);
+  color: var(--surligne-texte);
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+}
+
+.theme-avocat .liens a {
+  color: #f0e2b6;
+}
+
+.theme-avocat .pied {
+  color: #e6d7b0;
+  opacity: 1;
+}
+
+.theme-avocat progress {
+  accent-color: var(--barre);
+  background: var(--barre-fond);
+  border: 1px solid var(--bordure);
+  border-radius: 999px;
+}
+
+.theme-avocat progress::-webkit-progress-bar {
+  background: var(--barre-fond);
+  border-radius: 999px;
+}
+
+.theme-avocat progress::-webkit-progress-value {
+  background: var(--barre);
+  border-radius: 999px;
+}
+
+.theme-avocat progress::-moz-progress-bar {
+  background: var(--barre);
+  border-radius: 999px;
 }

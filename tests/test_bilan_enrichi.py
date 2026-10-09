@@ -371,23 +371,31 @@ def test_bilan_top_2_traits_dominants_mis_en_evidence(client):
 
 
 def test_bilan_jauge_gravite_lisible_sans_texte_brut(client):
+    """Rupture volontaire (plan ``presentation-contrast-avocat``, étape 3) :
+    le bilan ne doit plus AFFICHER la gravité (calcul conservé côté moteur).
+    Aucun texte (« Gravité de l'incident », « Gravité finale : N », « / 99 »)
+    ni jauge (``<meter>``, ``role=meter``) de gravité ne doit rester ; le
+    repérage du texte brut inaccessible est conservé (aucune valeur de
+    gravité en clair). Nom conservé (cité par tests/test_presentation_contraste.py).
+    """
     _affaire, _chemin, bilan = jouer_parcours_complet_prg(client)
     brut = bilan.get_data(as_text=True)
+    bas = brut.lower()
     normalisé = normaliser(brut)
 
-    assert "gravite finale" not in normalisé, "texte brut « Gravité finale : N » à supprimer"
+    assert "gravite de l'incident" not in normalisé, (
+        "le bilan ne doit plus afficher « Gravité de l'incident »"
+    )
+    assert "gravite finale" not in normalisé, (
+        "le bilan ne doit plus afficher « Gravité finale »"
+    )
     assert re.search(r"gravite\s+finale\s*:\s*\d", normalisé) is None, (
         "texte brut « Gravité finale : N » à supprimer"
     )
-    bas = brut.lower()
-    assert "<meter" in bas or "role=" in bas and ("meter" in bas or "gauge" in bas), (
-        "jauge de gravité absente (<meter> ou role=meter/gauge)"
-    )
-    assert any(mot in normalisé for mot in ("impact", "maitris", "limit", "elev", "gravit")), (
-        "libellé lisible de gravité absent (ex. Impact maîtrisé/limité/élevé)"
-    )
-    assert "aria-valuenow" in normalisé or "data-gravite" in normalisé, (
-        "valeur de gravité inaccessible (aria-valuenow ou data-gravite attendu)"
+    assert "/ 99" not in brut, "le bilan ne doit plus afficher « / 99 » côté gravité"
+    assert "<meter" not in bas, "la jauge <meter> de gravité doit être supprimée du bilan"
+    assert 'role="meter"' not in bas and "role='meter'" not in bas, (
+        "aucun role=meter de gravité ne doit rester dans le bilan"
     )
 
 

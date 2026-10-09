@@ -3,27 +3,30 @@
 {% block contenu %}
 <h1>Orientation Game</h1>
 <p class="accroche">Une orientation où on te regarde jouer, pas répondre à un questionnaire.</p>
-<p>Choisis un métier, vis une affaire, prends des décisions et reçois un bilan
-qui montre ce que tu as aimé faire et quels métiers te correspondent.</p>
+<p>Choisis un métier, vis une affaire, prends des décisions, puis découvre ce que tu as aimé faire et les études qui mènent à ce métier.</p>
 <h2>Choisis ton métier</h2>
 <ul class="metiers">
-  <li class="carte">
+  <li class="carte metier-carte">
+    <img class="carte-image" src="{{ url_for('static', filename='img/01-salle-serveurs.png') }}" alt="Salle de serveurs sous alerte">
     <h3>Expert cyber</h3>
     <p>Alerte au siège : des dossiers RH sont chiffrés et une rançon est exigée.
     Isole, enquête et protège l'entreprise.</p>
+    <span class="badge badge-jouable">Jouable</span>
     <a class="bouton" href="{{ url_for('partie') }}?affaire=cyber-alerte-serveur-rh">
       Jouer l'affaire cyber
     </a>
   </li>
-  <li class="carte">
+  <li class="carte metier-carte">
+    <img class="carte-image" src="{{ url_for('static', filename='img/06-plaidoirie.jpg') }}" alt="Plaidoirie au tribunal">
     <h3>Avocat de la défense</h3>
     <p>Inès Morel est soupçonnée après une dispute à la sortie du métro.
     Protège ses droits, examine le dossier et plaide au tribunal.</p>
+    <span class="badge badge-jouable">Jouable</span>
     <a class="bouton" href="{{ url_for('partie') }}?affaire=avocat-defense-001">
       Jouer l'affaire avocat
     </a>
   </li>
-  <li class="carte">
+  <li class="carte carte-bientot metier-carte">
     <h3>Médecin</h3>
     <p>Examiner, soigner et accompagner les patients au quotidien.</p>
     <span class="badge badge-bientot">Bientôt</span>
