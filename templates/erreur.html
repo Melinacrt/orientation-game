@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block titre %}Erreur {{ code }} — Orientation Game{% endblock %}
+{% block contenu %}
+<h1>Erreur {{ code }}</h1>
+<p class="message-erreur">{{ message }}</p>
+<p>Désolée, quelque chose s'est mal passé. Tu peux retourner à l'accueil
+ou reprendre ta partie en cours.</p>
+<p class="liens">
+  <a class="bouton" href="{{ url_for('accueil') }}">Retour à l'accueil</a>
+</p>
+{% endblock %}

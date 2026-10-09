@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block titre %}Bilan — Orientation Game{% endblock %}
+{% block contenu %}
+<h1>Bilan de ton affaire</h1>
+<section class="carte">
+  <h2>Fin : {{ bilan.fin.titre }}</h2>
+  {% if bilan.fin.texte %}
+  <p>{{ bilan.fin.texte }}</p>
+  {% endif %}
+  <p>Gravité finale : {{ bilan.gravite }}</p>
+</section>
+<section class="carte">
+  <h2>Scores par trait</h2>
+  <p class="aide">Tes scores montrent ce que tu as aimé faire pendant l'affaire.</p>
+  <ul class="scores">
+    {% for trait in traits %}
+    <li><span class="trait">{{ trait }}</span> : <strong>{{ bilan.scores[trait] }}</strong></li>
+    {% endfor %}
+  </ul>
+</section>
+<section class="carte">
+  <h2>Tes choix cités</h2>
+  <ul>
+    {% for citation in bilan.citations %}
+    <li>{{ citation }}</li>
+    {% endfor %}
+  </ul>
+</section>
+<section class="carte">
+  <h2>Ton profil : {{ bilan.profil.titre }}</h2>
+  <p>{{ bilan.profil.texte }}</p>
+  <p>Métiers proches :
+    {% for metier in bilan.metiers_proches %}<span class="etiquette">{{ metier }}</span>{% endfor %}
+  </p>
+</section>
+<p class="liens">
+  <a class="bouton" href="{{ url_for('partie') }}?affaire={{ affaire_id }}">Rejouer l'affaire</a>
+  <a href="{{ url_for('accueil') }}">Retour à l'accueil</a>
+</p>
+{% endblock %}

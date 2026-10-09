@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block titre %}Accueil — Orientation Game{% endblock %}
+{% block contenu %}
+<h1>Orientation Game</h1>
+<p class="accroche">Une orientation où on te regarde jouer, pas répondre à un questionnaire.</p>
+<p>Choisis un métier, vis une affaire, prends des décisions et reçois un bilan
+qui montre ce que tu as aimé faire et quels métiers te correspondent.</p>
+<h2>Choisis ton métier</h2>
+<ul class="metiers">
+  <li class="carte">
+    <h3>Expert cyber</h3>
+    <p>Alerte au siège : des dossiers RH sont chiffrés et une rançon est exigée.
+    Isole, enquête et protège l'entreprise.</p>
+    <a class="bouton" href="{{ url_for('partie') }}?affaire=cyber-alerte-serveur-rh">
+      Jouer l'affaire cyber
+    </a>
+  </li>
+</ul>
+<p class="bientot">Avocat et médecin arrivent bientôt.</p>
+{% endblock %}

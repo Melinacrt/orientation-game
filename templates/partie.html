@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block titre %}{{ affaire.titre }} — Orientation Game{% endblock %}
+{% block contenu %}
+<h1>{{ affaire.titre }}</h1>
+<p class="contexte">{{ affaire.contexte }}</p>
+{% if consequence %}
+<p class="consequence">{{ consequence }}</p>
+{% endif %}
+<section class="carte">
+  <h2>Étape {{ numero }} sur {{ total }}</h2>
+  <p class="etape">{{ etape.texte }}</p>
+  <form method="post" action="{{ url_for('jouer') }}">
+    <input type="hidden" name="affaire" value="{{ affaire_id }}">
+    <input type="hidden" name="etape" value="{{ etape_id }}">
+    <fieldset>
+      <legend>Que fais-tu ?</legend>
+      {% for choix in etape.choix %}
+      <label class="choix">
+        <input type="radio" name="choix" value="{{ choix.id }}" required>
+        <span>{{ choix.label }}</span>
+      </label>
+      {% endfor %}
+    </fieldset>
+    <button class="bouton" type="submit">Choisir</button>
+  </form>
+</section>
+<p class="liens">
+  <a href="{{ url_for('bilan') }}">Voir mon bilan en cours</a> ·
+  <a href="{{ url_for('accueil') }}">Retour à l'accueil</a>
+</p>
+{% endblock %}

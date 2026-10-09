@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titre %}Orientation Game{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="bandeau">
+    <nav class="navigation">
+      <a class="logo" href="{{ url_for('accueil') }}">Orientation Game</a>
+      <a href="{{ url_for('accueil') }}">Accueil</a>
+    </nav>
+  </header>
+  <main class="contenu">
+    {% block contenu %}{% endblock %}
+  </main>
+  <footer class="pied">
+    <p>Un jeu d'orientation : on te regarde jouer, pas répondre à un questionnaire. Sans IA.</p>
+  </footer>
+</body>
+</html>

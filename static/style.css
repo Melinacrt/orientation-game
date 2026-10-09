@@ -1,0 +1,162 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.6;
+  color: #1d2733;
+  background: #f4f6fb;
+}
+
+.bandeau {
+  background: #1d2733;
+  color: #fff;
+}
+
+.navigation {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 0.8rem 1rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.navigation a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.navigation .logo {
+  font-weight: 700;
+  margin-right: auto;
+}
+
+.contenu {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+h1 {
+  font-size: 1.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.accroche {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.carte {
+  background: #fff;
+  border: 1px solid #d9e1ec;
+  border-radius: 0.75rem;
+  padding: 1.2rem;
+  margin: 1.2rem 0;
+  box-shadow: 0 1px 3px rgb(29 39 51 / 0.08);
+}
+
+.contexte,
+.etape {
+  background: #fff;
+  border-left: 4px solid #2f6fed;
+  padding: 0.8rem 1rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.consequence {
+  background: #eef7ee;
+  border-left: 4px solid #2e8b57;
+  padding: 0.8rem 1rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+fieldset {
+  border: 1px solid #d9e1ec;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.choix {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  padding: 0.5rem 0;
+}
+
+.bouton {
+  display: inline-block;
+  background: #2f6fed;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.65rem 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  margin-top: 0.8rem;
+}
+
+.bouton:hover {
+  background: #1f54c4;
+}
+
+.metiers {
+  list-style: none;
+  padding: 0;
+}
+
+.bientot {
+  color: #5a6b7f;
+  font-style: italic;
+}
+
+.scores {
+  list-style: none;
+  padding: 0;
+}
+
+.scores li {
+  padding: 0.25rem 0;
+}
+
+.trait {
+  font-weight: 600;
+}
+
+.etiquette {
+  display: inline-block;
+  background: #e6edff;
+  border-radius: 999px;
+  padding: 0.15rem 0.7rem;
+  margin: 0.1rem;
+}
+
+.message-erreur {
+  font-weight: 600;
+  color: #8f1d1d;
+}
+
+.liens {
+  margin-top: 1.2rem;
+}
+
+.pied {
+  text-align: center;
+  color: #5a6b7f;
+  font-size: 0.9rem;
+  padding: 1.5rem 1rem;
+}
+
+@media (max-width: 36rem) {
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .contenu {
+    padding: 1rem 0.8rem 2rem;
+  }
+}
