@@ -1,11 +1,10 @@
-import { existsSync, readdirSync } from "node:fs"
+import { existsSync } from "node:fs"
 import { join } from "node:path"
 import type { Plugin } from "@opencode-ai/plugin"
 
 const PY_TOOLS = new Set(["edit", "write", "patch", "multiedit"])
 const MAX_OUTPUT = 2000
 const RUFF_TIMEOUT_MS = 120_000
-const PYTEST_TIMEOUT_MS = 180_000
 
 type Command = {
   argv: string[]
@@ -66,23 +65,6 @@ function run(command: Command, args: string[], dir: string, timeoutMs: number): 
   }
 }
 
-function hasTests(dir: string): boolean {
-  const root = join(dir, "tests")
-  if (!existsSync(root)) return false
-  const walk = (current: string): boolean =>
-    readdirSync(current, { withFileTypes: true }).some((entry) => {
-      const full = join(current, entry.name)
-      if (entry.isDirectory()) return walk(full)
-      return /(^test_.*\.py$|_test\.py$)/.test(entry.name)
-    })
-  return walk(root)
-}
-
-function isTestFile(filePath: string): boolean {
-  const normalized = filePath.replace(/\\/g, "/")
-  return normalized.startsWith("tests/") || normalized.includes("/tests/")
-}
-
 function extractFilePath(args: Record<string, unknown>): string | null {
   if (typeof args.filePath === "string") return args.filePath
   if (typeof args.path === "string") return args.path
@@ -115,7 +97,16 @@ export default (async ({ directory }) => {
   // donc valables quelle que soit la manière dont opencode a été lancé.
   const dir = directory || process.cwd()
 
-  const runGate = async (isTestEdit: boolean): Promise<string[]> => {
+  /**
+   * Gate de pré-édition : seul `ruff` bloque.
+   *
+   * `pytest` ne bloque jamais les éditions : un test rouge est l'état normal
+   * d'entrée du TDD (test écrit avant le code). Bloquer les éditions sur un
+   * `pytest` rouge créait un deadlock (impossible d'écrire le code qui fait
+   * passer le test). `pytest -q` vert reste exigé comme critère de fin d'étape
+   * (cf. AGENTS.md), mais il est vérifié après coup, jamais en pré-édition.
+   */
+  const runGate = async (): Promise<string[]> => {
     const failures: string[] = []
 
     const ruff = resolveCommand("ruff", dir)
@@ -126,14 +117,16 @@ export default (async ({ directory }) => {
       if (res && res.exitCode !== 0) {
         failures.push(`${detail(ruff, res)} :\n${tail(res.output || "(aucune sortie)")}`)
       }
-    }
-
-    const pytest = resolveCommand("pytest", dir)
-    if (pytest && hasTests(dir) && !isTestEdit) {
-      const res = run(pytest, ["-q"], dir, PYTEST_TIMEOUT_MS)
-      if (res && res.exitCode !== 0) {
-        failures.push(`${detail(pytest, res)} :\n${tail(res.output || "(aucune sortie)")}`)
-      }
+    } else {
+      // Cause AUTORISE-vs-BLOQUE (verif-simple.ts AUTORISE vs verif-msg.ts BLOQUE
+      // pour le même arbre sale F401) : sans ruff sur le PATH et sans `.venv`
+      // dans `dir`, `resolveCommand` renvoie `null` et `runGate` renvoyait `[]`,
+      // donc le hook autorisait en silence. On garde l'édition autorisée
+      // (outil absent = contrôle ignoré) mais avec un avertissement visible
+      // et non bloquant au lieu du silence.
+      console.warn(
+        `Gate qualité : ruff introuvable ni sur le PATH ni dans "${dir}/.venv", contrôle ignoré, édition autorisée.`,
+      )
     }
 
     return failures
@@ -144,7 +137,7 @@ export default (async ({ directory }) => {
       if (!PY_TOOLS.has(input.tool)) return
       const filePath = extractFilePath(output.args as Record<string, unknown>)
       if (!filePath || !filePath.toLowerCase().endsWith(".py")) return
-      const failures = await runGate(isTestFile(filePath))
+      const failures = await runGate()
       if (failures.length > 0) {
         throw new Error(
           `Édition bloquée par le gate qualité :\n\n${failures.join("\n\n")}\n\nCorrige les problèmes puis relance l'édition.`,

@@ -43,7 +43,7 @@ Règles de collaboration :
 - Ordre de délégation d'une étape : tester -> dev -> reviewer.
 - Une étape n'est « finie » que si `ruff check .` et `pytest -q` passent.
 - Hook bloquant `.opencode/plugin/gate.ts` : avant toute édition/écriture d'un `.py`,
-  ruff doit passer, et pytest aussi — sauf si le fichier édité est un test
-  (un test peut légitiment échouer avant implémentation). Si `ruff`/`pytest` sont
-  introuvables (PATH ou `.venv/`), le contrôle correspondant est ignoré.
+  `ruff check . --no-cache` doit passer, sinon l'édition est refusée ; `pytest`
+  ne bloque jamais les éditions (un test rouge est l'état normal du TDD) ; si `ruff`
+  est introuvable (PATH ou `.venv/`), avertissement visible, édition autorisée (contrôle ignoré).
 - Outils isolés dans le venv : `.venv\Scripts\python.exe -m pip install -e ".[dev]"`.

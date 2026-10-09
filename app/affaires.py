@@ -46,6 +46,27 @@ def charger_affaire(chemin: str | Path) -> dict:
     return affaire
 
 
+def compter_etapes(affaire: dict) -> int:
+    """Compte le nombre d'étapes d'une affaire.
+
+    Args:
+        affaire: Dictionnaire de l'affaire déjà chargée.
+
+    Returns:
+        Le nombre d'entrées de ``affaire["etapes"]``.
+
+    Raises:
+        ValueError: Si l'entrée est invalide (pas un dictionnaire, ou
+            clé « etapes » absente, non-dict ou vide).
+    """
+    if not isinstance(affaire, dict):
+        raise ValueError("L'affaire doit être un objet JSON.")
+    etapes = affaire.get("etapes")
+    if not isinstance(etapes, dict) or not etapes:
+        raise ValueError("La clé « etapes » doit être un objet JSON non vide.")
+    return len(etapes)
+
+
 def _vers_chemin(chemin: str | Path) -> Path:
     if isinstance(chemin, Path):
         return chemin
